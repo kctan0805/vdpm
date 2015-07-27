@@ -1,0 +1,49 @@
+#ifndef OSGVDPM_SRMESHDRAWABLE
+#define OSGVDPM_SRMESHDRAWABLE 1
+
+#include <osg/Drawable>
+
+namespace osgVdpm {
+
+class vdpm::SRMesh;
+
+class OSG_EXPORT SRMeshDrawable : public osg::Drawable
+{
+    public:
+
+        SRMeshDrawable();
+
+        /** Copy constructor using CopyOp to manage deep vs shallow copy.*/
+        SRMeshDrawable(const SRMeshDrawable& srmeshdrawable, const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY);
+
+        META_Object(osgVdpm, SRMeshDrawable);
+
+        virtual void drawImplementation(osg::RenderInfo& renderInfo) const;
+
+        virtual osg::BoundingBox computeBound() const;
+
+        void setSRMesh(vdpm::SRMesh* srmesh) { this->srmesh = srmesh; }
+        vdpm::SRMesh* getSRMesh() const { return srmesh; }
+
+    protected:
+
+        SRMeshDrawable& operator = (const SRMeshDrawable&) { return *this;}
+
+        virtual ~SRMeshDrawable();
+
+    private:
+
+        enum RealizeStatus {
+            NOT_REALIZED = 0,
+            REALIZING,
+            REALIZED
+        };
+
+        vdpm::SRMesh* srmesh;
+        mutable vdpm::Viewport* viewport;
+        mutable RealizeStatus status;
+};
+
+}
+
+#endif

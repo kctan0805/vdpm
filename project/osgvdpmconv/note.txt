@@ -1,0 +1,8 @@
+﻿osgvdpmconv:
+
+parameter:
+north-america.vdpm north-america.osgt
+--vdpm 2 cow.osg cow.osgt --smooth
+
+work directory:
+$(ProjectDir)/../../../../../data

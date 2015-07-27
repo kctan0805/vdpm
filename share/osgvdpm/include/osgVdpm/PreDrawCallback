@@ -1,0 +1,17 @@
+#ifndef OSGVDPM_PREDRAWCALLBACK
+#define OSGVDPM_PREDRAWCALLBACK 1
+
+#include <osg/Camera>
+
+namespace osgVdpm {
+
+class PreDrawCallback : public osg::Camera::DrawCallback
+{
+public:
+    virtual void operator () (osg::RenderInfo& renderInfo) const;
+
+};
+
+}
+
+#endif

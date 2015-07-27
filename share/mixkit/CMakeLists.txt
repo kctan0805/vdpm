@@ -1,0 +1,55 @@
+set(CMAKE_CURRENT_SOURCE_DIR ${MIXKIT_SOURCE_DIR}/src)
+include_directories(${FLTK_INCLUDE_DIR} ${GFX_INCLUDE_DIR} ${MESH_INCLUDE_DIR})
+
+set(CORE_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/mixmsg.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxCmdParser.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxAsp.cxx
+)
+set(MATH_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxMat3-jacobi.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxMat4-jacobi.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/MxGeom3D.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/MxTriProject.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/MxFrame.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/MxFitFrame.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxFitFrame-2.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxGeom2D.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/mixmops.cxx
+)
+set(MODEL_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxBlockModel.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxStdModel.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxSMF.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxQMetric3.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxQSlim.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxStdSlim.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxQMetric.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxPropSlim.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxDualModel.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxFaceTree.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxFaceTree-2.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxDualSlim.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxEdgeFilter.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxFeatureFilter.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxOBJ.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxVdpmSlim.cxx
+)
+set(DATA_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxHeap.cxx
+)
+# These modules require OpenGL or Mesa
+set(GL_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxCamera.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxQVis3.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxStdRender.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxGLDebug.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxGLUtils.cxx
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxFitFrame-vis.cxx
+)
+# These modules require the FLTK toolkit <http://www.fltk.org/>
+set(GUI_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/MxStdGUI.cxx
+)
+
+add_library(mixkit STATIC ${CORE_SRCS} ${MATH_SRCS} ${MODEL_SRCS} ${DATA_SRCS} ${GL_SRCS} ${GUI_SRCS})

@@ -1,0 +1,25 @@
+#ifndef OSGVDPM_SRMESHUSERSTATS
+#define OSGVDPM_SRMESHUSERSTATS 1
+
+#include <osg/Referenced>
+#include <osgViewer/ViewerEventHandlers>
+
+namespace osgVdpm {
+
+class OSG_EXPORT SRMeshUserStats
+{
+    public:
+        static void init(osgViewer::StatsHandler* statsHandler);
+
+        static const std::string tauName;
+        static const std::string afaceCountName;
+        static const std::string vmorphCountName;
+        static const std::string afaceCountPerTStripName;
+
+    private:
+        SRMeshUserStats() {}
+};
+
+}
+
+#endif

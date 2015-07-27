@@ -1,0 +1,2 @@
+set(CFG_USE_GLEW y)
+set(CFG_USE_VDPM y)

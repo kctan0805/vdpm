@@ -1,0 +1,43 @@
+#ifndef OSGVDPM_SRMESHUSERDATA
+#define OSGVDPM_SRMESHUSERDATA 1
+
+#include <osg/Referenced>
+#include <osg/Stats>
+
+namespace osgVdpm {
+
+class OSG_EXPORT SRMeshUserData : public osg::Referenced
+{
+    public:
+        SRMeshUserData() : _pause(false), _tau(0.0f), _targetAFaceCount(UINT_MAX), _amortizeStep(1), _gtime(8) {}
+
+        void setPause(bool pause) { _pause = pause; }
+        bool getPause() const { return _pause; }
+
+        void setStats(osg::Stats* stats) { _stats = stats; }
+        osg::Stats* getStats() const { return _stats.get(); }
+
+        void setTau(float tau) { _tau = tau; }
+        float getTau() const { return _tau; }
+
+        void setTargetAFaceCount(unsigned int targetAFaceCount) { _targetAFaceCount = targetAFaceCount; }
+        unsigned int getTargetAFaceCount() const { return _targetAFaceCount; }
+
+        void setAmortizeStep(unsigned int amortizeStep) { _amortizeStep = amortizeStep; }
+        unsigned int getAmortizeStep() const { return _amortizeStep; }
+
+        void setGTime(unsigned int gtime) { _gtime = gtime; }
+        unsigned int getGTime() const { return _gtime; }
+
+private:
+    bool _pause;
+    osg::ref_ptr<osg::Stats> _stats;
+    float _tau;
+    unsigned int _targetAFaceCount;
+    unsigned int _amortizeStep;
+    unsigned int _gtime;
+};
+
+}
+
+#endif

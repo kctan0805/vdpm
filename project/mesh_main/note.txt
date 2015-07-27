@@ -1,0 +1,120 @@
+﻿parameter:
+north-america.smf output.smf
+
+work directory:
+$(ProjectDir)/../../../../../data
+
+
+MESH: Measuring Error between Surfaces using the Hausdorff distance
+MESH version 1.13
+
+Copyright (C) 2001-2004 EPFL
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+Report bugs to <Nicolas.Aspert@epfl.ch> and <Diego.SantaCruz@epfl.ch>
+
+Usage: mesh [[options] file1 file2]
+
+The program measures the distance from the 3D model in
+file1 to the one in file2. The models must be given as
+triangular meshes in RAW, VRML2, Inventor 2.x, PLY ASCII,
+PLY binary, and SMF formats. Normals are supported in RAW
+and VRML2 formats. It also reads gzipped files directly.
+The VRML parser reads IndexedFaceSets nodes only,
+ignoring all transformations, and does not support USE tags
+(DEF tags are ignored). Likewise the Inventor 2.x reader is
+somewhat limited. The file type is autodetected.
+After the distance is calculated the result is displayed
+as overall measures in text form and as a detailed distance
+map in graphical form.
+If no options nor filenames are given a dialog is shown
+to select the input file names as well as the parameters.
+
+Display:
+After calculating the distance, the error distribution on
+model 1 is displayed in graphical form. There are three
+modes to display the error distribution: vertex error, face
+mean error and sample error.
+In vertex error, each vertex is assigned a color based on
+the calculated error at that vertex (if not calculated at
+that vertex, dark gray is used) and the color is
+interpolated between vertices. Invisible vertices are added
+as necessary to display error at sample points which are not
+vertices of model 1. The ratio between the total number of
+error samples and error samples displayed is controlled by
+the "vertex error downsampling" parameter. For low
+downsampling values it can be very accurate, but it can use
+a large number of triangles. For high downsampling values
+the result can be misleading, although very fast.
+In mean face error, each triangle is assigned a color based
+on the mean error for that face (if that face has no samples
+a dark gray is used).
+In sample error mode  a color is assigned to each sample
+point based on the error at that point, and  applied to the
+model using texture mapping (if a face has no sample points
+a dark gray is assigned to it). This mode is as accurate as
+the vertex error mode with a downsampling value of 1,
+although it can be very slow if model 1 has a large number
+of triangles. If model 1 has few triangles and there is a
+large number of samples this mode can be considerably faster
+than vertex error mode with a low downsampling value.
+A colorbar showing the correspondance between error values
+and color is displayed. The colorbar also shows the
+approximate distribution, on the surface of model 1, of the
+error values using a histogram (approximate because the
+distribution of the sample points on the surface is not
+truly uniform).
+Note that the -mf flag can force a minimum number of samples
+per face.
+
+options:
+  -h    Displays this help message and exits.
+
+  -v    Displays version number, legal info and exits.
+
+  -s    Calculate a symmetric distance measure. It calculates
+        the distance in the two directions and uses the max
+        as the symmetric distance (Hausdorff distance).
+
+  -q    Quiet, do not print progress meter.
+
+  -va   Be verbose about non-manifold vertices during the
+        model analysis phase.
+
+  -t    Display only textual results, do not display the GUI.
+
+  -l s  Set the sampling step to s, which is a percentage of
+        the bounding box diagonal of the second model. The
+        triangles of the first model are sampled, in order
+        to calculate an approximation of the distance, so
+        that the sampling density (number of samples per
+        unit surface) is 1/(s^2) (i.e. one sample per square
+        of side length s). A probabilistic model is used so
+        that the resulting number is as close as possible to
+        the target. The default is 0.5
+
+  -mf f Ensure that each triangle has a sampling frequency
+        of at least f. Normally the sampling frequency for
+        a triangle is determined by the sampling step and
+        triangle size. For some combinations this can lead
+        to some triangles having no or few samples. With a
+        non-zero f parameter this can be avoided, although
+        it disturbs the uniform distribution of samples.
+        With f set to 1, all triangles get at least one
+        sample. With f set to 2, all triangles get at least
+        three samples, and thus all vertices get a sample.
+        Higher values of f are less useful. By default it
+        is zero in non-GUI mode and two in GUI mode.
+
+  -wlog Display textual results in a window instead of on
+        standard output. Not compatible with the -t option.
+
+  -tex  Enables the display of the error by texture mapping
+        on the model.
+        WARNING : handle with care. Some platforms will
+        fail to display this, and using this on big models
+        will probably crash your computer with a
+        swap storm. Not compatible with the -t option.
+

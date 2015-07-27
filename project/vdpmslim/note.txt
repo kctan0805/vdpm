@@ -1,0 +1,5 @@
+parameter:
+-t 2 -o output.vdpm north-america.smf
+
+work directory:
+$(ProjectDir)/../../../../../data

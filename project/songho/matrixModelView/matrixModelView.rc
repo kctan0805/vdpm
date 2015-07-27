@@ -1,0 +1,262 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FORMVIEW DIALOGEX 0, 0, 355, 320
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "View (Camera)",IDC_STATIC,6,7,342,113
+    GROUPBOX        "Model",IDC_STATIC,6,123,342,114
+    GROUPBOX        "      ModelView Matrix      ",IDC_STATIC,6,245,102,66,BS_CENTER
+    RTEXT           "1",IDC_M_MV_0,7,257,23,8
+    RTEXT           "0",IDC_M_MV_1,31,257,23,8
+    RTEXT           "0",IDC_M_MV_2,55,257,23,8
+    RTEXT           "0",IDC_M_MV_3,79,257,23,8
+    RTEXT           "0",IDC_M_MV_4,7,269,23,8
+    RTEXT           "1",IDC_M_MV_5,31,269,23,8
+    RTEXT           "0",IDC_M_MV_6,55,269,23,8
+    RTEXT           "0",IDC_M_MV_7,79,269,23,8
+    RTEXT           "0",IDC_M_MV_8,7,281,23,8
+    RTEXT           "0",IDC_M_MV_9,31,281,23,8
+    RTEXT           "1",IDC_M_MV_10,55,281,23,8
+    RTEXT           "0",IDC_M_MV_11,79,281,23,8
+    RTEXT           "0",IDC_M_MV_12,7,293,23,8
+    RTEXT           "0",IDC_M_MV_13,31,293,23,8
+    RTEXT           "0",IDC_M_MV_14,55,293,23,8
+    RTEXT           "1",IDC_M_MV_15,79,293,23,8
+    GROUPBOX        "          View Matrix          ",IDC_STATIC,126,245,102,66,BS_CENTER
+    CTEXT           "=",IDC_STATIC,112,273,8,8
+    CTEXT           "X",IDC_STATIC,232,275,8,8
+    GROUPBOX        "         Model Matrix         ",IDC_STATIC,246,245,102,66,BS_CENTER
+    RTEXT           "1",IDC_M_V_0,127,257,23,8
+    RTEXT           "0",IDC_M_V_1,151,257,23,8
+    RTEXT           "0",IDC_M_V_2,175,257,23,8
+    RTEXT           "0",IDC_M_V_3,199,257,23,8
+    RTEXT           "0",IDC_M_V_4,127,269,23,8
+    RTEXT           "1",IDC_M_V_5,151,269,23,8
+    RTEXT           "0",IDC_M_V_6,175,269,23,8
+    RTEXT           "0",IDC_M_V_7,199,269,23,8
+    RTEXT           "0",IDC_M_V_8,127,281,23,8
+    RTEXT           "0",IDC_M_V_9,151,281,23,8
+    RTEXT           "1",IDC_M_V_10,175,281,23,8
+    RTEXT           "0",IDC_M_V_11,199,281,23,8
+    RTEXT           "0",IDC_M_V_12,127,293,23,8
+    RTEXT           "0",IDC_M_V_13,151,293,23,8
+    RTEXT           "0",IDC_M_V_14,175,293,23,8
+    RTEXT           "1",IDC_M_V_15,199,293,23,8
+    RTEXT           "1",IDC_M_M_0,247,257,23,8
+    RTEXT           "0",IDC_M_M_1,271,257,23,8
+    RTEXT           "0",IDC_M_M_2,295,257,23,8
+    RTEXT           "0",IDC_M_M_3,319,257,23,8
+    RTEXT           "0",IDC_M_M_4,247,269,23,8
+    RTEXT           "1",IDC_M_M_5,271,269,23,8
+    RTEXT           "0",IDC_M_M_6,295,269,23,8
+    RTEXT           "0",IDC_M_M_7,319,269,23,8
+    RTEXT           "0",IDC_M_M_8,247,281,23,8
+    RTEXT           "0",IDC_M_M_9,271,281,23,8
+    RTEXT           "1",IDC_M_M_10,295,281,23,8
+    RTEXT           "0",IDC_M_M_11,319,281,23,8
+    RTEXT           "0",IDC_M_M_12,247,293,23,8
+    RTEXT           "0",IDC_M_M_13,271,293,23,8
+    RTEXT           "0",IDC_M_M_14,295,293,23,8
+    RTEXT           "1",IDC_M_M_15,319,293,23,8
+    CONTROL         "",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,258,305,78,8
+    CONTROL         "",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,138,305,78,8
+    CONTROL         "",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,18,305,78,8
+    LTEXT           "Position",IDC_STATIC,18,34,26,8
+    LTEXT           "Heading (Y)",IDC_STATIC,18,88,38,8
+    LTEXT           "Pitch (X)",IDC_STATIC,28,73,28,8
+    CONTROL         "",IDC_SPIN_VIEW_X,"msctls_updown32",UDS_ARROWKEYS,96,18,11,12
+    EDITTEXT        IDC_EDIT_VIEW_X,60,18,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_HEADING,60,87,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_PITCH,60,72,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    CONTROL         "",IDC_SPIN_HEADING,"msctls_updown32",UDS_ARROWKEYS,96,87,11,12
+    CONTROL         "",IDC_SPIN_PITCH,"msctls_updown32",UDS_ARROWKEYS,96,72,11,12
+    PUSHBUTTON      "Reset",IDC_BUTTON_VIEW_RESET,114,18,42,14
+    LTEXT           "Position",IDC_STATIC,18,150,26,8
+    LTEXT           "Rotation",IDC_STATIC,15,205,28,8
+    EDITTEXT        IDC_EDIT_POSITION_X,60,135,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_POSITION_Y,60,150,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_POSITION_Z,60,165,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_ROTATION_X,60,189,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_ROTATION_Y,60,204,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_ROTATION_Z,60,219,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    CONTROL         "",IDC_SPIN_POSITION_X,"msctls_updown32",UDS_ARROWKEYS,96,135,11,12
+    CONTROL         "",IDC_SPIN_POSITION_Y,"msctls_updown32",UDS_ARROWKEYS,96,150,11,12
+    CONTROL         "",IDC_SPIN_POSITION_Z,"msctls_updown32",UDS_ARROWKEYS,96,165,11,12
+    CONTROL         "",IDC_SPIN_ROTATION_X,"msctls_updown32",UDS_ARROWKEYS,96,189,11,12
+    CONTROL         "",IDC_SPIN_ROTATION_Y,"msctls_updown32",UDS_ARROWKEYS,96,204,11,12
+    CONTROL         "",IDC_SPIN_ROTATION_Z,"msctls_updown32",UDS_ARROWKEYS,96,219,11,12
+    RTEXT           "X",IDC_STATIC,48,137,8,8
+    RTEXT           "Y",IDC_STATIC,48,151,8,8
+    RTEXT           "Z",IDC_STATIC,48,167,8,8
+    RTEXT           "X",IDC_STATIC,48,191,8,8
+    RTEXT           "Y",IDC_STATIC,48,206,8,8
+    RTEXT           "Z",IDC_STATIC,48,221,8,8
+    PUSHBUTTON      "Reset",IDC_BUTTON_MODEL_RESET,114,135,42,14
+    EDITTEXT        IDC_EDIT_VIEW_Y,60,33,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    EDITTEXT        IDC_EDIT_VIEW_Z,60,48,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    CONTROL         "",IDC_SPIN_VIEW_Y,"msctls_updown32",UDS_ARROWKEYS,96,33,11,12
+    CONTROL         "",IDC_SPIN_VIEW_Z,"msctls_updown32",UDS_ARROWKEYS,96,48,11,12
+    RTEXT           "X",IDC_STATIC,48,19,8,8
+    RTEXT           "Y",IDC_STATIC,48,35,8,8
+    RTEXT           "Z",IDC_STATIC,48,50,8,8
+    EDITTEXT        IDC_EDIT_ROLL,60,102,36,12,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+    CONTROL         "",IDC_SPIN_ROLL,"msctls_updown32",UDS_ARROWKEYS,96,102,11,12
+    LTEXT           "Roll (Z)",IDC_STATIC,32,104,24,8
+    LTEXT           "GL functions",IDC_VIEW_GL,168,30,174,84,SS_SUNKEN
+    LTEXT           "GL functions",IDC_MODEL_GL,168,147,174,84,SS_SUNKEN
+    LTEXT           "OpenGL Functions",IDC_STATIC,168,18,59,8
+    LTEXT           "OpenGL Functions",IDC_STATIC,168,135,59,8
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 232, 78
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "About"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDC_OK,175,57,50,14
+    CONTROL         103,IDC_STATIC,"Static",SS_BITMAP,7,7,67,62
+    LTEXT           "OpenGL ModelView Matrix\nwww.songho.ca/opengl/gl_transform.html",IDC_STATIC,84,12,138,18
+    LTEXT           "Copyright (C) 2011\nSong Ho Ahn (song.ahn@gmail.com)",IDC_STATIC,84,36,138,18
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_FORMVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 348
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 313
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 225
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 71
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_MAIN MENU 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "About",                       ID_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_SONGHO       BITMAP                  "songho_alpha.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (Canada) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENC)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_CAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+32512               ICON                    "songho.ico"
+#endif    // English (Canada) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

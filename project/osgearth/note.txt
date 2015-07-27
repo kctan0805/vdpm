@@ -1,0 +1,22 @@
+﻿osgearth_viewer:
+
+parameter:
+gdal_tiff.earth
+
+work directory:
+$(ProjectDir)/../../../../../share/osgearth/gwaldron-osgearth-350f1a0/tests
+
+
+osgearth_overlayviewer:
+
+parameter:
+gdal_tiff.earth
+
+work directory:
+$(ProjectDir)/../../../../../share/osgearth/gwaldron-osgearth-350f1a0/tests
+
+
+osgearth_city:
+
+work directory:
+$(ProjectDir)/../../../../../share/osgearth/gwaldron-osgearth-350f1a0/tests

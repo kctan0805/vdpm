@@ -1,0 +1,872 @@
+set(CMAKE_CURRENT_SOURCE_DIR ${XERCESC_SOURCE_DIR})
+
+ADD_DEFINITIONS(
+    -DXERCES_BUILDING_LIBRARY
+    -DXERCES_USE_TRANSCODER_WINDOWS
+    -DXERCES_USE_WIN32_MSGLOADER
+    -DXERCES_USE_NETACCESSOR_WINSOCK
+    -DXERCES_USE_FILEMGR_WINDOWS
+    -DXERCES_USE_MUTEXMGR_WINDOWS
+    -DXERCES_PATH_DELIMITER_BACKSLASH
+    -DHAVE_STRICMP
+    -DHAVE_STRNICMP
+    -DHAVE_LIMITS_H
+    -DHAVE_SYS_TIMEB_H
+    -DHAVE_FTIME
+    -DHAVE_WCSUPR
+    -DHAVE_WCSLWR
+    -DHAVE_WCSICMP
+    -DHAVE_WCSNICMP
+)
+
+INCLUDE_DIRECTORIES(
+    ${XERCESC_INCLUDE_DIR}
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Xerces_autoconf_config.msvc.hpp ${CMAKE_BINARY_DIR}/share/xercesc/src/xercesc/util/Xerces_autoconf_config.hpp)
+
+ADD_DEFINITIONS( -DXERCES_BUILDING_LIBRARY )
+
+SET(dom_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOM.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMAttr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMCDATASection.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMCharacterData.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMComment.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMConfiguration.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMDocument.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMDocumentFragment.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMDocumentRange.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMDocumentTraversal.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMDocumentType.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMElement.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMEntity.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMEntityReference.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMError.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMErrorHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMImplementation.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMImplementationList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMImplementationLS.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMImplementationRegistry.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMImplementationSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLocator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSInput.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSOutput.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSParser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSParserFilter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSResourceResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSSerializer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSSerializerFilter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMMemoryManager.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNamedNodeMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNode.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNodeFilter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNodeIterator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNodeList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMNotation.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMProcessingInstruction.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMPSVITypeInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMRange.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMRangeException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMStringList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMText.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMTreeWalker.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMTypeInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMUserDataHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathEvaluator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathExpression.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathNamespace.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathNSResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathResult.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/StDOMNode.hpp
+)
+
+SET(dom_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMException.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMLSException.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMRangeException.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/DOMXPathException.cpp
+)
+
+SET(domimpl_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrMapImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrNSImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCasts.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCDATASectionImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCharacterDataImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMChildNode.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCommentImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMConfigurationImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDeepNodeListImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDeepNodeListPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentFragmentImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentTypeImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMElementImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMElementNSImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMEntityImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMEntityReferenceImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMErrorImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMImplementationImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMImplementationListImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLocatorImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNamedNodeMapImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeIDMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeIteratorImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeListImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeVector.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNormalizer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNotationImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMParentNode.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMProcessingInstructionImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMRangeImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMStringListImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMStringPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTextImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTreeWalkerImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTypeInfoImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSSerializerImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSInputImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSOutputImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathExpressionImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathNSResolverImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathResultImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/XSDElementNSImpl.hpp
+)
+
+SET(domimpl_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrMapImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMAttrNSImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCDATASectionImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCharacterDataImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMChildNode.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMCommentImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMConfigurationImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDeepNodeListImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentFragmentImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMDocumentTypeImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMElementImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMElementNSImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMEntityImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMEntityReferenceImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMErrorImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMImplementationImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMImplementationListImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMImplementationRegistry.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLocatorImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNamedNodeMapImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeIDMap.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeIteratorImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeListImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNodeVector.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNormalizer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMNotationImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMParentNode.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMProcessingInstructionImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMRangeImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMStringListImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMStringPool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTextImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTreeWalkerImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMTypeInfoImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSSerializerImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSInputImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMLSOutputImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathExpressionImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathNSResolverImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/DOMXPathResultImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/dom/impl/XSDElementNSImpl.cpp
+)
+
+SET(framework_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/BinOutputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/LocalFileFormatTarget.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/LocalFileInputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/MemBufFormatTarget.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/MemBufInputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/MemoryManager.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIAttribute.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIAttributeList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIElement.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIItem.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAnnotation.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeDeclaration.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeGroupDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeUse.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSComplexTypeDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSConstants.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSElementDeclaration.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSFacet.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSIDCDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModelGroup.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModelGroupDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSMultiValueFacet.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSNamedMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSNamespaceItem.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSNotationDeclaration.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSObject.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSParticle.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSSimpleTypeDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSTypeDefinition.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSValue.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSWildcard.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/StdInInputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/StdOutFormatTarget.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/URLInputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/ValidationContext.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/Wrapper4DOMLSInput.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/Wrapper4InputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttDef.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttDefList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLBuffer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLBufferMgr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLContentModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLDocumentHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLDTDDescription.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLElementDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLEntityDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLEntityHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLErrorCodes.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLErrorReporter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLFormatter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLGrammarDescription.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLGrammarPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLGrammarPoolImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLNotationDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLPScanToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLRecognizer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLRefInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLSchemaDescription.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLValidityCodes.hpp
+)
+
+SET(framework_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/BinOutputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/LocalFileFormatTarget.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/LocalFileInputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/MemBufFormatTarget.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/MemBufInputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIAttribute.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIAttributeList.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIElement.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/PSVIItem.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAnnotation.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeDeclaration.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeGroupDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSAttributeUse.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSComplexTypeDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSElementDeclaration.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSFacet.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSIDCDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModelGroup.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSModelGroupDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSMultiValueFacet.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSNamespaceItem.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSNotationDeclaration.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSObject.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSParticle.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSSimpleTypeDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSTypeDefinition.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSValue.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/psvi/XSWildcard.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/StdInInputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/StdOutFormatTarget.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/URLInputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/Wrapper4DOMLSInput.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/Wrapper4InputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttDef.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttDefList.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLAttr.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLBuffer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLBufferMgr.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLContentModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLDTDDescription.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLElementDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLEntityDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLFormatter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLGrammarDescription.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLGrammarPoolImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLNotationDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLRecognizer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLRefInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLSchemaDescription.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/framework/XMLValidator.cpp
+)
+
+SET(internal_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/BinFileOutputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/BinMemOutputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/CharTypeTables.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/DGXMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ElemStack.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/EndOfEntityException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/IANAEncodings.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/IGXMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/MemoryManagerImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ReaderMgr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/SGXMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ValidationContextImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/VecAttributesImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/VecAttrListImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/WFXMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLInternalErrorHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLReader.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLScannerResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XProtoType.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSAXMLScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSerializable.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSerializationException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSerializeEngine.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSObjectFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XTemplateSerializer.hpp
+)
+
+SET(internal_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/BinFileOutputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/BinMemOutputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/DGXMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ElemStack.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/IGXMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/IGXMLScanner2.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/MemoryManagerImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ReaderMgr.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/SGXMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/ValidationContextImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/VecAttributesImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/VecAttrListImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/WFXMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLReader.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XMLScannerResolver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XProtoType.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSAXMLScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSerializeEngine.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XSObjectFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/internal/XTemplateSerializer.cpp
+)
+
+SET(parsers_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/AbstractDOMParser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/DOMLSParserImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAX2XMLFilterImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAX2XMLReaderImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAXParser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/XercesDOMParser.hpp
+)
+
+SET(parsers_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/AbstractDOMParser.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/DOMLSParserImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAX2XMLFilterImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAX2XMLReaderImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/SAXParser.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/parsers/XercesDOMParser.cpp
+)
+
+SET(sax_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/AttributeList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/DocumentHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/DTDHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/EntityResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/ErrorHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/HandlerBase.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/InputSource.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/Locator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/Parser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/SAXException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/SAXParseException.hpp
+)
+
+SET(sax_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/Dummy.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/InputSource.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/SAXException.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax/SAXParseException.cpp
+)
+
+SET(sax2_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/Attributes.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/ContentHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/DeclHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/DefaultHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/LexicalHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/SAX2XMLFilter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/SAX2XMLReader.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/XMLReaderFactory.hpp
+)
+
+SET(sax2_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/sax2/sax2Dummy.cpp
+)
+
+SET(util_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ArrayIndexOutOfBoundsException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Base64.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BaseRefVectorOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinFileInputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinInputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinMemInputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BitOps.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BitSet.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/CountedPointer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/DefaultPanicHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/EmptyStackException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/EncodingValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/FlagJanitor.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Hashers.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Hash2KeysSetOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/HexBin.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/IllegalArgumentException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/InvalidCastException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/IOException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Janitor.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/KeyRefPair.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/KeyValuePair.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/KVStringPair.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Mutexes.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NameIdPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NoSuchElementException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NullPointerException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NumberFormatException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/OutOfMemoryException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PanicHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ParseException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PlatformUtils.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PSVIUni.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/QName.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefArrayOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefArrayVectorOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefHash2KeysTableOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefHash3KeysIdPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefHashTableOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefStackOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RefVectorOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ASCIIRangeFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/BlockRangeFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/BMPattern.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/CharToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ClosureToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ConcatToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Match.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Op.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/OpFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ParenToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ParserForXMLSchema.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeTokenMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegularExpression.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegxDefs.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegxParser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegxUtil.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/StringToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Token.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/TokenFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/TokenInc.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/UniCharTable.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/UnicodeRangeFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/UnionToken.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/XMLRangeFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/XMLUniCharacter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/RuntimeException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/SchemaDateTimeException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/SecurityManager.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/StringPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/SynchronizedStringPool.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/TranscodingException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/TransENameMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/TransService.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/UnexpectedEOFException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/UnsupportedEncodingException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/UTFDataFormatException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ValueArrayOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ValueHashTableOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ValueStackOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/ValueVectorOf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XercesDefs.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XercesVersion.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMemory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XML256TableTranscoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XML88591Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLAbstractDoubleFloat.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLASCIITranscoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLBigDecimal.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLBigInteger.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLChar.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLChTranscoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLDateTime.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLDOMMsg.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLDouble.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLEBCDICTranscoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLEntityResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLEnumerator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLExceptMsgs.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLFileMgr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLFloat.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLIBM1047Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLIBM1140Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLInitializer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLInteger.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLMutexMgr.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLMsgLoader.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLNetAccessor.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLNumber.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLResourceIdentifier.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLString.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLStringTokenizer.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUCS4Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUni.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUniDefs.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUri.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLURL.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUTF16Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUTF8Transcoder.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLWin1252Transcoder.hpp
+)
+
+SET(util_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Base64.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinFileInputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinInputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BinMemInputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/BitSet.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/DefaultPanicHandler.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/EncodingValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/HeaderDummy.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/HexBin.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/KVStringPair.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Mutexes.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PanicHandler.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PlatformUtils.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/PSVIUni.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/QName.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ASCIIRangeFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/BlockRangeFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/BMPattern.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/CharToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ClosureToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ConcatToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Match.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Op.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/OpFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ParenToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/ParserForXMLSchema.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RangeTokenMap.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegularExpression.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegxParser.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/RegxUtil.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/StringToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/Token.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/TokenFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/UnicodeRangeFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/UnionToken.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/XMLRangeFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/regx/XMLUniCharacter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/StringPool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/SynchronizedStringPool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/TransService.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMemory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XML256TableTranscoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XML88591Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLAbstractDoubleFloat.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLASCIITranscoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLBigDecimal.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLBigInteger.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLChar.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLChTranscoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLDateTime.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLDouble.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLEBCDICTranscoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLException.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLFloat.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLIBM1047Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLIBM1140Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLInitializer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLMsgLoader.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLNumber.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLString.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLStringTokenizer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUCS4Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUni.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUri.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLURL.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUTF16Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLUTF8Transcoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/XMLWin1252Transcoder.cpp
+)
+
+SET(validators_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/AllContentModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMAny.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMBinaryOp.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMLeaf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMRepeatingLeaf.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMNode.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMStateSet.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMUnaryOp.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/ContentLeafNameTypeVector.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/ContentSpecNode.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/DFAContentModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/Grammar.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/GrammarResolver.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/MixedContentModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/SimpleContentModel.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractNumericFacetValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractNumericValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractStringValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AnySimpleTypeDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AnyURIDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/Base64BinaryDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/BooleanDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DatatypeValidatorFactory.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateTimeDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateTimeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DayDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DecimalDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DoubleDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DurationDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/ENTITYDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/FloatDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/HexBinaryDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/IDDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/IDREFDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/InvalidDatatypeFacetException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/InvalidDatatypeValueException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/ListDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/MonthDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/MonthDayDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NameDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NCNameDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NOTATIONDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/QNameDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/StringDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/TimeDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/UnionDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/XMLCanRepGroup.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/YearDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/YearMonthDatatypeValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DocTypeHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDAttDef.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDAttDefList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDElementDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDEntityDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDGrammar.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDScanner.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/XMLDTDDescriptionImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/ComplexTypeInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/GeneralAttributeCheck.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/FieldActivator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/FieldValueMap.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Field.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Key.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_KeyRef.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Selector.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Unique.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IdentityConstraint.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IdentityConstraintHandler.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/ValueStore.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/ValueStoreCache.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XercesXPath.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathException.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathMatcher.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathMatcherStack.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathSymbols.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/NamespaceScope.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/PSVIDefs.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaAttDef.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaAttDefList.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaElementDecl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaGrammar.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaSymbols.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaValidator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SubstitutionGroupComparator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/TraverseSchema.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesAttGroupInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesElementWildcard.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesGroupInfo.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XMLSchemaDescriptionImpl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDDOMParser.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDErrorReporter.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDLocator.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XUtil.hpp
+)
+
+SET(validators_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/AllContentModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMAny.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMBinaryOp.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/CMUnaryOp.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/ContentLeafNameTypeVector.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/ContentSpecNode.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/DFAContentModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/Grammar.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/GrammarResolver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/MixedContentModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/common/SimpleContentModel.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractNumericFacetValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractNumericValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AbstractStringValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AnySimpleTypeDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/AnyURIDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/Base64BinaryDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/BooleanDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DatatypeValidatorFactory.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateTimeDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DateTimeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DayDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DecimalDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DoubleDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/DurationDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/ENTITYDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/FloatDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/HexBinaryDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/IDDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/IDREFDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/ListDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/MonthDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/MonthDayDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NameDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NCNameDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/NOTATIONDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/QNameDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/StringDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/TimeDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/UnionDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/XMLCanRepGroup.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/YearDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/datatype/YearMonthDatatypeValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDAttDef.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDAttDefList.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDElementDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDEntityDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDGrammar.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDScanner.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/DTDValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/DTD/XMLDTDDescriptionImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/ComplexTypeInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/GeneralAttributeCheck.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/FieldActivator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/FieldValueMap.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Field.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Key.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_KeyRef.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Selector.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IC_Unique.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IdentityConstraint.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/IdentityConstraintHandler.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/ValueStore.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/ValueStoreCache.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XercesXPath.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathMatcher.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathMatcherStack.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/identity/XPathSymbols.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/NamespaceScope.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaAttDef.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaAttDefList.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaElementDecl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaGrammar.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaSymbols.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SchemaValidator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/SubstitutionGroupComparator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/TraverseSchema.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesAttGroupInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesElementWildcard.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XercesGroupInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XMLSchemaDescriptionImpl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDDOMParser.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDErrorReporter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XSDLocator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/validators/schema/XUtil.cpp
+)
+
+SET(xinclude_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeDOMDocumentProcessor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeLocation.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeUtils.hpp
+)
+
+SET(xinclude_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeDOMDocumentProcessor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeLocation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/xinclude/XIncludeUtils.cpp
+)
+
+SET(wintrans_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Transcoders/Win32/Win32TransService.hpp
+)
+
+SET(wintrans_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/Transcoders/Win32/Win32TransService.cpp
+)
+
+SET(winsock_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/WinSock/WinSockNetAccessor.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/WinSock/BinHTTPURLInputStream.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/BinHTTPInputStreamCommon.hpp
+)
+
+SET(winsock_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/WinSock/WinSockNetAccessor.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/WinSock/BinHTTPURLInputStream.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/NetAccessors/BinHTTPInputStreamCommon.cpp
+)
+
+SET(msgwin32_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/MsgLoaders/Win32/Win32MsgLoader.hpp
+)
+
+SET(msgwin32_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/MsgLoaders/Win32/Win32MsgLoader.cpp
+)
+
+SET(winfmgr_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/FileManagers/WindowsFileMgr.hpp
+)
+
+SET(winfmgr_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/FileManagers/WindowsFileMgr.cpp
+)
+
+SET(winmmgr_headers
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/MutexManagers/WindowsMutexMgr.hpp
+)
+
+SET(winmmgr_sources
+	${CMAKE_CURRENT_SOURCE_DIR}/src/xercesc/util/MutexManagers/WindowsMutexMgr.cpp
+)
+
+ADD_LIBRARY(xerces-c STATIC
+    ${util_sources} ${dom_sources} ${domimpl_sources}
+    ${framework_sources} ${internal_sources} ${parsers_sources} ${sax_sources}
+    ${sax2_sources} ${validators_sources} ${xinclude_sources}
+    ${util_headers} ${dom_headers}
+    ${domimpl_headers} ${framework_headers} ${internal_headers}
+    ${parsers_headers} ${sax_headers} ${sax2_headers} ${validators_headers}
+    ${xinclude_headers}
+    ${wintrans_headers} ${wintrans_sources} ${winsock_headers} ${winsock_sources} ${msgwin32_headers} ${msgwin32_sources}
+    ${winfmgr_headers} ${winfmgr_sources} ${winmmgr_headers} ${winmmgr_sources}
+)
