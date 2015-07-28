@@ -3,6 +3,7 @@
   This project includes implementations of View-dependent progressive meshes.
   http://research.microsoft.com/en-us/um/people/hoppe/proj/vdrpm
 
+
 Libraries:
   vdpm:
   Core runtime refinement library. Features includes
@@ -61,3 +62,17 @@ Program:
   osgvdpmconv:
   Modified from osgconv to convert general models to osgt/osgb format of vdpm files.
   Source codes are at project/osgvdpmconv.
+
+
+Platform:
+  Support windows platform only.
+
+
+How to build:
+  1. Install Visual Studio
+  2. Install CMake
+  3. mkdir <Root directory of this project>/build
+  4. In CMake GUI:
+     Where is the source code: --> <Root directory of this project>
+     Where to build the binaries: --> <Root directory of this project>/build/<program name>
+  5. Press [Configure] & [Generate], the solution files will be generated at <Root directory of this project>/build/<program name>
