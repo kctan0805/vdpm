@@ -65,7 +65,7 @@ Program:
 
 
 Platform:
-  Support windows platform only.
+  Built and tested on windows platform only.
 
 
 How to build:
