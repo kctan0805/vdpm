@@ -8,7 +8,7 @@ Libraries:
   vdpm:
   Core runtime refinement library. Features includes
 
-  * Geomorph with custom enhanment.
+  * Geomorph with custom enhancement to reduce popping effect.
   * Refinement criteria:
     - View frustum
     - Surface orientation
