@@ -73,6 +73,6 @@ How to build:
   2. Install CMake
   3. mkdir <Root directory of this project>/build
   4. In CMake GUI:
-     Where is the source code: --> <Root directory of this project>
-     Where to build the binaries: --> <Root directory of this project>/build/<program name>
+     - Where is the source code: --> <Root directory of this project>
+     - Where to build the binaries: --> <Root directory of this project>/build/<program name>
   5. Press [Configure] & [Generate], the solution files will be generated at <Root directory of this project>/build/<program name>
