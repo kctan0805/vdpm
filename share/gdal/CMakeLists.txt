@@ -6,6 +6,7 @@ add_definitions(
     -DHAVE_CURL
     -DHAVE_LIBJPEG
     -DHAVE_LIBZ
+    -DINTERNAL_LIBGEOTIFF
     -DJPEG_SUPPORTED
     -DOGR_ENABLED
     -DPCIDSK_INTERNAL
@@ -126,6 +127,7 @@ add_definitions(
     -DOGR
     -DMITAB_USE_OFTDATETIME
     -DPROJ_STATIC
+    -DGDAL_COMPILATION
 )
 
 include_directories(
@@ -143,6 +145,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/alg
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/blx
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/gtiff
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/gtiff/libgeotiff
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/iso8211
@@ -150,7 +153,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/mem
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/sdk
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcraster/libcsf
-    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/sdts
@@ -164,6 +166,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/gml
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/mem
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/pds
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/pgdump
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/shape
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/xplane
     ${CMAKE_CURRENT_SOURCE_DIR}/port
@@ -242,7 +245,6 @@ set(GCORE_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalpamproxydb.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalallvalidmaskband.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalnodatamaskband.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdal_rpcimdio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalproxydataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalproxypool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalnodatavaluesmaskband.cpp
@@ -253,6 +255,22 @@ set(GCORE_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalgeorefpamdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdaljp2abstractdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalvirtualmem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdaloverviewdataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdalrescaledalphaband.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdaljp2structure.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdal_mdreader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/gdaljp2metadatagenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_digital_globe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_geo_eye.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_orb_view.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_pleiades.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_rdk1.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_landsat.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_spot.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_rapid_eye.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_alos.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_eros.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gcore/mdreader/reader_kompsat.cpp
 )
 set(ALG_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/alg/gdaldither.cpp
@@ -339,11 +357,11 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/ehdrdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/pauxdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/doq1dataset.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/hkvdataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/doq2dataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/mffdataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/hkvdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/pnmdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/fujibasdataset.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/doq2dataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/envidataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/gscdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/fastdataset.cpp
@@ -364,6 +382,7 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/snodasdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/ctable2dataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/krodataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/raw/roipacdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/gxf/gxfopen.c
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/gxf/gxfdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/gxf/gxf_ogcwkt.c
@@ -422,6 +441,7 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/nitf/nitfdes.c
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/nitf/nitf_gcprpc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/pcidskdataset2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/ogrpcidsklayer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/vsi_pcidsk_io.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/gdal_edb.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pcidsk/sdk/channel/cbandinterleavedchannel.cpp
@@ -564,7 +584,9 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/pdsdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/isis2dataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/isis3dataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/vicardataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/nasakeywordhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pds/vicarkeywordhandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/adrg/adrgdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/adrg/srpdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/coasp/coasp_dataset.cpp
@@ -590,6 +612,9 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/pdfio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/pdfobject.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/pdfcreatecopy.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/ogrpdflayer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/pdfwritabledataset.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/frmts/pdf/pdfreadvectors.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/iris/irisdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/map/mapdataset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/jpeg/jpgdataset.cpp
@@ -601,65 +626,89 @@ set(FRMTS_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/frmts/iso8211/ddfrecord.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/frmts/iso8211/ddffield.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/frmts/iso8211/ddfsubfielddefn.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/gdalwmscache.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/gdalwmsdataset.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/gdalwmsrasterband.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/gdalhttp.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/md5.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/wmsutils.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/wmsdriver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_wms.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_tileservice.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_worldwind.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_tms.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_tiled_wms.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/wmsmetadataset.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_virtualearth.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/frmts/wms/minidriver_arcgis_server.cpp
 )
 set(OGR_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrgeometryfactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrpoint.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrcurve.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_api.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrlinestring.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrpolygon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrlinearring.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrpolygon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrgeometry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrgeometrycollection.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmultipolygon.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmultilinestring.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_opt.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsurface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmultipoint.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmultilinestring.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrcircularstring.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrcompoundcurve.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrcurvepolygon.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrcurvecollection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmulticurve.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrmultisurface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_api.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeature.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeaturedefn.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeaturequery.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeaturestyle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfielddefn.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srsnode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrspatialreference.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srsnode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_proj4.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_fromepsg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrct.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeaturestyle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_opt.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_esri.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrfeaturequery.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_validate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_xml.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ograssemblepolygon.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr2gmlgeometry.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/gml2ogrgeometry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_pci.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_usgs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_dict.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_panorama.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_ozi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_erm.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_expat.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_expr_node.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_select.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_op_registrar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_op_general.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/swq_expr_node.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_validate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_srs_xml.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ograssemblepolygon.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr2gmlgeometry.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/gml2ogrgeometry.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_expat.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrpgeogeometry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrgeomediageometry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogr_geocoding.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/osr_cs_wkt.c
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/osr_cs_wkt_parser.c
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrgeomfielddefn.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ograpispy.cpp
 )
 set(OGR_FRMTS_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrsfdriverregistrar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrlayer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogr_gensql.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrdatasource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrsfdriver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrregisterall.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogr_gensql.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogr_attrind.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogr_miattrind.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrlayerdecorator.cpp
@@ -668,6 +717,7 @@ set(OGR_FRMTS_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrlayerpool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrmutexedlayer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogrmutexeddatasource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/generic/ogremulatedtransaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/geojson/ogrgeojsondriver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/geojson/ogrgeojsondatasource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/geojson/ogrgeojsonlayer.cpp
@@ -917,8 +967,6 @@ set(OGR_FRMTS_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/segy/ogrsegydriver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/segy/ogrsegydatasource.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/segy/ogrsegylayer.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/pdf/ogrpdfdriver.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/pdf/ogrpdfdatasource.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/sxf/ogrsxfdriver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/sxf/ogrsxfdatasource.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/sxf/ogrsxflayer.cpp
@@ -934,6 +982,7 @@ set(OGR_FRMTS_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/wfs/ogrwfsdatasource.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/wfs/ogrwfslayer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/wfs/ogrwfsfilter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/wfs/ogrwfsjoinlayer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/gft/ogrgftdriver.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/gft/ogrgftdatasource.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ogr/ogrsf_frmts/gft/ogrgftlayer.cpp

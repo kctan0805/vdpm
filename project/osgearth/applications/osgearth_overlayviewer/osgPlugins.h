@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 //This file is used to force the linking of the osg and hogbox plugins
 //as we our doing a static build we can't depend on the loading of the
@@ -49,7 +49,6 @@ USE_OSGPLUGIN(osgearth_feature_wfs)
 USE_OSGPLUGIN(osgearth_feature_tfs)
 USE_OSGPLUGIN(osgearth_tms)
 USE_OSGPLUGIN(osgearth_wms)
-USE_OSGPLUGIN(osgearth_label_overlay)
 USE_OSGPLUGIN(osgearth_xyz)
 USE_OSGPLUGIN(osgearth_label_annotation)
 USE_OSGPLUGIN(osgearth_mask_feature)

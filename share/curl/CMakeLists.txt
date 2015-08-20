@@ -20,7 +20,28 @@ set(OS "\"${CMAKE_SYSTEM_NAME}\"")
 include_directories(${PROJECT_BINARY_DIR}/include/curl)
 include_directories( ${CURL_SOURCE_DIR}/include )
 
+option(BUILD_CURL_EXE "Set to ON to build cURL executable." OFF)
+option(BUILD_CURL_TESTS "Set to ON to build cURL tests." OFF)
 option(CURL_STATICLIB "Set to ON to build libcurl with static linking." ON)
+option(ENABLE_ARES "Set to ON to enable c-ares support" OFF)
+option(ENABLE_THREADED_RESOLVER "Set to ON to enable POSIX threaded DNS lookup" OFF)
+
+option(ENABLE_DEBUG "Set to ON to enable curl debug features" OFF)
+option(ENABLE_CURLDEBUG "Set to ON to build with TrackMemory feature enabled" OFF)
+
+if (ENABLE_DEBUG)
+  # DEBUGBUILD will be defined only for Debug builds
+  if(NOT CMAKE_VERSION VERSION_LESS 3.0)
+    set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUGBUILD>)
+  else()
+    set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUGBUILD)
+  endif()
+  set(ENABLE_CURLDEBUG ON)
+endif()
+
+if (ENABLE_CURLDEBUG)
+  set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS CURLDEBUG)
+endif()
 
 # initialize CURL_LIBS
 set(CURL_LIBS "")
@@ -121,8 +142,21 @@ include (CheckCSourceCompiles)
 
 # On windows preload settings
 if(WIN32)
+  set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_WINSOCKAPI_")
   include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/Platforms/WindowsCache.cmake)
 endif(WIN32)
+
+if(ENABLE_THREADED_RESOLVER)
+  check_include_file_concat("pthread.h" HAVE_PTHREAD_H)
+  if(HAVE_PTHREAD_H)
+    set(CMAKE_THREAD_PREFER_PTHREAD 1)
+    find_package(Threads)
+    if(CMAKE_USE_PTHREADS_INIT)
+      set(CURL_LIBS ${CURL_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+      set(USE_THREADS_POSIX 1)
+    endif()
+  endif()
+endif()
 
 # Check for all needed libraries
 check_library_exists_concat("dl"     dlopen       HAVE_LIBDL)
@@ -133,12 +167,13 @@ if(NOT NOT_NEED_LIBNSL)
   check_library_exists_concat("nsl"    gethostbyname  HAVE_LIBNSL)
 endif(NOT NOT_NEED_LIBNSL)
 
+check_function_exists(gethostname HAVE_GETHOSTNAME)
+
 if(WIN32)
   check_library_exists_concat("ws2_32" getch        HAVE_LIBWS2_32)
   check_library_exists_concat("winmm"  getch        HAVE_LIBWINMM)
 endif()
 
-set(USE_SSLEAY OFF)
 set(USE_OPENSSL OFF)
 set(HAVE_LIBCRYPTO OFF)
 set(HAVE_LIBSSL OFF)
@@ -146,11 +181,11 @@ set(HAVE_LIBSSL OFF)
 if(NOT CURL_DISABLE_LDAP)
 
   if(WIN32)
-    option(CURL_LDAP_WIN "Use Windows LDAP implementation" ON)
-    if(CURL_LDAP_WIN)
+    option(USE_WIN32_LDAP "Use Windows LDAP implementation" ON)
+    if(USE_WIN32_LDAP)
       check_library_exists("wldap32" cldap_open "" HAVE_WLDAP32)
       if(NOT HAVE_WLDAP32)
-        set(CURL_LDAP_WIN OFF)
+        set(USE_WIN32_LDAP OFF)
       endif()
     endif()
   endif()
@@ -160,12 +195,12 @@ if(NOT CURL_DISABLE_LDAP)
   set(CMAKE_LDAP_LIB "ldap" CACHE STRING "Name or full path to ldap library")
   set(CMAKE_LBER_LIB "lber" CACHE STRING "Name or full path to lber library")
 
-  if(CMAKE_USE_OPENLDAP AND CURL_LDAP_WIN)
-    message(FATAL_ERROR "Cannot use CURL_LDAP_WIN and CMAKE_USE_OPENLDAP at the same time")
+  if(CMAKE_USE_OPENLDAP AND USE_WIN32_LDAP)
+    message(FATAL_ERROR "Cannot use USE_WIN32_LDAP and CMAKE_USE_OPENLDAP at the same time")
   endif()
 
   # Now that we know, we're not using windows LDAP...
-  if(NOT CURL_LDAP_WIN)
+  if(NOT USE_WIN32_LDAP)
     # Check for LDAP
     set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
     check_library_exists_concat(${CMAKE_LDAP_LIB} ldap_init HAVE_LIBLDAP)
@@ -221,7 +256,7 @@ if(NOT CURL_DISABLE_LDAP)
         return 0;
       }"
     )
-    set(CMAKE_REQUIRED_DEFINITIONS "-DLDAP_DEPRECATED=1" "-DWIN32_LEAN_AND_MEAN")
+    set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -DLDAP_DEPRECATED=1")
     list(APPEND CMAKE_REQUIRED_LIBRARIES ${CMAKE_LDAP_LIB})
     if(HAVE_LIBLBER)
       list(APPEND CMAKE_REQUIRED_LIBRARIES ${CMAKE_LBER_LIB})
@@ -276,76 +311,15 @@ set(USE_LIBSSH2 OFF)
 set(HAVE_LIBSSH2 OFF)
 set(HAVE_LIBSSH2_H OFF)
 
-option(CMAKE_USE_GSSAPI "Use GSSAPI implementation (right now only Heimdal is supported with CMake build)" OFF)
-mark_as_advanced(CMAKE_USE_GSSAPI)
-
-if(CMAKE_USE_GSSAPI)
-  find_package(GSS)
-
-  set(HAVE_GSS_API ${GSS_FOUND})
-  if(GSS_FOUND)
-
-    message(STATUS "Found ${GSS_FLAVOUR} GSSAPI version: \"${GSS_VERSION}\"")
-
-    set(CMAKE_REQUIRED_INCLUDES ${GSS_INCLUDE_DIR})
-    check_include_file_concat("gssapi/gssapi.h"  HAVE_GSSAPI_GSSAPI_H)
-    check_include_file_concat("gssapi/gssapi_generic.h" HAVE_GSSAPI_GSSAPI_GENERIC_H)
-    check_include_file_concat("gssapi/gssapi_krb5.h" HAVE_GSSAPI_GSSAPI_KRB5_H)
-
-    if(GSS_FLAVOUR STREQUAL "Heimdal")
-      set(HAVE_GSSHEIMDAL ON)
-    else() # MIT
-      set(HAVE_GSSMIT ON)
-      set(_INCLUDE_LIST "")
-      if(HAVE_GSSAPI_GSSAPI_H)
-        list(APPEND _INCLUDE_LIST "gssapi/gssapi.h")
-      endif()
-      if(HAVE_GSSAPI_GSSAPI_GENERIC_H)
-        list(APPEND _INCLUDE_LIST "gssapi/gssapi_generic.h")
-      endif()
-      if(HAVE_GSSAPI_GSSAPI_KRB5_H)
-        list(APPEND _INCLUDE_LIST "gssapi/gssapi_krb5.h")
-      endif()
-
-      string(REPLACE ";" " " _COMPILER_FLAGS_STR "${GSS_COMPILER_FLAGS}")
-      string(REPLACE ";" " " _LINKER_FLAGS_STR "${GSS_LINKER_FLAGS}")
-
-      foreach(_dir ${GSS_LINK_DIRECTORIES})
-        set(_LINKER_FLAGS_STR "${_LINKER_FLAGS_STR} -L\"${_dir}\"")
-      endforeach()
-
-      set(CMAKE_REQUIRED_FLAGS "${_COMPILER_FLAGS_STR} ${_LINKER_FLAGS_STR}")
-      set(CMAKE_REQUIRED_LIBRARIES ${GSS_LIBRARIES})
-      check_symbol_exists("GSS_C_NT_HOSTBASED_SERVICE" ${_INCLUDE_LIST} HAVE_GSS_C_NT_HOSTBASED_SERVICE)
-      if(NOT HAVE_GSS_C_NT_HOSTBASED_SERVICE)
-        set(HAVE_OLD_GSSMIT ON)
-      endif()
-
-    endif()
-
-    include_directories(${GSS_INCLUDE_DIR})
-    link_directories(${GSS_LINK_DIRECTORIES})
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GSS_COMPILER_FLAGS}")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GSS_LINKER_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GSS_LINKER_FLAGS}")
-    list(APPEND CURL_LIBS ${GSS_LIBRARIES})
-
-  else()
-    message(WARNING "GSSAPI support has been requested but no supporting libraries found. Skipping.")
-  endif()
-endif()
-
 # Check for header files
-if(NOT UNIX)
-  check_include_file_concat("ws2tcpip.h"     HAVE_WS2TCPIP_H)
-  check_include_file_concat("winsock2.h"     HAVE_WINSOCK2_H)
-endif(NOT UNIX)
-check_include_file_concat("stdio.h"          HAVE_STDIO_H)
 if(NOT UNIX)
   check_include_file_concat("windows.h"      HAVE_WINDOWS_H)
   check_include_file_concat("winsock.h"      HAVE_WINSOCK_H)
+  check_include_file_concat("ws2tcpip.h"     HAVE_WS2TCPIP_H)
+  check_include_file_concat("winsock2.h"     HAVE_WINSOCK2_H)
 endif(NOT UNIX)
 
+check_include_file_concat("stdio.h"          HAVE_STDIO_H)
 check_include_file_concat("inttypes.h"       HAVE_INTTYPES_H)
 check_include_file_concat("sys/filio.h"      HAVE_SYS_FILIO_H)
 check_include_file_concat("sys/ioctl.h"      HAVE_SYS_IOCTL_H)
@@ -390,7 +364,7 @@ check_include_file_concat("setjmp.h"         HAVE_SETJMP_H)
 check_include_file_concat("sgtty.h"          HAVE_SGTTY_H)
 check_include_file_concat("signal.h"         HAVE_SIGNAL_H)
 check_include_file_concat("ssl.h"            HAVE_SSL_H)
-set(HAVE_STDBOOL_H 1)
+check_include_file_concat("stdbool.h"        HAVE_STDBOOL_H)
 check_include_file_concat("stdint.h"         HAVE_STDINT_H)
 check_include_file_concat("stdio.h"          HAVE_STDIO_H)
 check_include_file_concat("stdlib.h"         HAVE_STDLIB_H)
@@ -435,6 +409,17 @@ if(NOT HAVE_SIZEOF_SSIZE_T)
     set(ssize_t __int64)
   endif(NOT ssize_t AND SIZEOF___INT64 EQUAL SIZEOF_SIZE_T)
 endif(NOT HAVE_SIZEOF_SSIZE_T)
+
+# Different sizeofs, etc.
+
+#    define CURL_SIZEOF_LONG        4
+#    define CURL_TYPEOF_CURL_OFF_T  long long
+#    define CURL_FORMAT_CURL_OFF_T  "lld"
+#    define CURL_FORMAT_CURL_OFF_TU "llu"
+#    define CURL_FORMAT_OFF_T       "%lld"
+#    define CURL_SIZEOF_CURL_OFF_T  8
+#    define CURL_SUFFIX_CURL_OFF_T  LL
+#    define CURL_SUFFIX_CURL_OFF_TU ULL
 
 set(CURL_SIZEOF_LONG ${SIZEOF_LONG})
 
@@ -526,7 +511,6 @@ if(CMAKE_USE_OPENSSL)
     HAVE_CRYPTO_CLEANUP_ALL_EX_DATA)
   if(HAVE_LIBCRYPTO AND HAVE_LIBSSL)
     set(USE_OPENSSL 1)
-    set(USE_SSLEAY 1)
   endif(HAVE_LIBCRYPTO AND HAVE_LIBSSL)
 endif(CMAKE_USE_OPENSSL)
 check_symbol_exists(gmtime_r      "${CURL_INCLUDES}" HAVE_GMTIME_R)
@@ -744,53 +728,9 @@ endif()
 set(CURL_PULL_STDINT_H ${HAVE_STDINT_H})
 set(CURL_PULL_INTTYPES_H ${HAVE_INTTYPES_H})
 
-include(CheckCSourceCompiles)
-# The begin of the sources (macros and includes)
-set(_source_epilogue "#undef inline")
-
-macro(add_header_include check header)
-  if(${check})
-    set(_source_epilogue "${_source_epilogue}\n#include <${header}>")
-  endif(${check})
-endmacro(add_header_include)
-
-set(signature_call_conv)
-if(HAVE_WINDOWS_H)
-  add_header_include(HAVE_WINDOWS_H "windows.h")
-  add_header_include(HAVE_WINSOCK2_H "winsock2.h")
-  add_header_include(HAVE_WINSOCK_H "winsock.h")
-  set(_source_epilogue
-      "${_source_epilogue}\n#ifndef WIN32_LEAN_AND_MEAN\n#define WIN32_LEAN_AND_MEAN\n#endif")
-  set(signature_call_conv "PASCAL")
-  if(HAVE_LIBWS2_32)
-    set(CMAKE_REQUIRED_LIBRARIES ws2_32)
-  endif()
-else(HAVE_WINDOWS_H)
-  add_header_include(HAVE_SYS_TYPES_H "sys/types.h")
-  add_header_include(HAVE_SYS_SOCKET_H "sys/socket.h")
-endif(HAVE_WINDOWS_H)
-
-set(RECV_TYPE_ARG1 "SOCKET")
-set(RECV_TYPE_ARG2 "char *")
-set(RECV_TYPE_ARG3 "size_t")
-set(RECV_TYPE_ARG4 "int")
-set(RECV_TYPE_RETV "int")
-set(HAVE_RECV 1)
-
-set(SEND_TYPE_ARG1 "SOCKET")
-set(SEND_TYPE_ARG2 "char *")
-set(SEND_TYPE_ARG3 "int")
-set(SEND_TYPE_ARG4 "int")
-set(SEND_TYPE_RETV "int")
-set(SEND_QUAL_ARG2 "const")
-set(HAVE_SEND 1)
-
-check_c_source_compiles("${_source_epilogue}
-  int main(void) {
-    int flag = MSG_NOSIGNAL;
-    (void)flag;
-    return 0;
-  }" HAVE_MSG_NOSIGNAL)
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
+endif(MSVC)
 
 if(NOT HAVE_WINDOWS_H)
   add_header_include(HAVE_SYS_TIME_H "sys/time.h")
@@ -849,13 +789,6 @@ if(HAVE_SIZEOF_STRUCT_SOCKADDR_STORAGE)
   set(HAVE_STRUCT_SOCKADDR_STORAGE 1)
 endif(HAVE_SIZEOF_STRUCT_SOCKADDR_STORAGE)
 
-add_definitions(-DHAVE_CONFIG_H)
-
-# For windows, do not allow the compiler to use default target (Vista).
-if(WIN32)
-  add_definitions(-D_WIN32_WINNT=0x0501)
-endif(WIN32)
-
 set(CMAKE_CURRENT_SOURCE_DIR ${CURL_SOURCE_DIR}/lib)
 
 set(LIB_NAME curl)
@@ -874,8 +807,8 @@ set(LIB_VTLS_CFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/polarssl_threadlock.c
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/axtls.c
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/cyassl.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/curl_schannel.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/curl_darwinssl.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/schannel.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/darwinssl.c
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/gskit.c
 )
 set(LIB_VTLS_HFILES
@@ -887,8 +820,8 @@ set(LIB_VTLS_HFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/polarssl_threadlock.h
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/axtls.h
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/cyassl.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/curl_schannel.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/curl_darwinssl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/schannel.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/vtls/darwinssl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/vtls/gskit.h
 )
 set(LIB_CFILES
@@ -986,13 +919,16 @@ set(LIB_CFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_sasl.c
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_multibyte.c
   ${CMAKE_CURRENT_SOURCE_DIR}/hostcheck.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/bundles.c
   ${CMAKE_CURRENT_SOURCE_DIR}/conncache.c
   ${CMAKE_CURRENT_SOURCE_DIR}/pipeline.c
   ${CMAKE_CURRENT_SOURCE_DIR}/dotdot.c
   ${CMAKE_CURRENT_SOURCE_DIR}/x509asn1.c
   ${CMAKE_CURRENT_SOURCE_DIR}/http2.c
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_sasl_sspi.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/smb.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_sasl_gssapi.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_endian.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_des.c
 )
 set(LIB_HFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/arpa_telnet.h
@@ -1081,7 +1017,6 @@ set(LIB_HFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_sasl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_multibyte.h
   ${CMAKE_CURRENT_SOURCE_DIR}/hostcheck.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/bundles.h
   ${CMAKE_CURRENT_SOURCE_DIR}/conncache.h
   ${CMAKE_CURRENT_SOURCE_DIR}/curl_setup_once.h
   ${CMAKE_CURRENT_SOURCE_DIR}/multihandle.h
@@ -1091,6 +1026,11 @@ set(LIB_HFILES
   ${CMAKE_CURRENT_SOURCE_DIR}/x509asn1.h
   ${CMAKE_CURRENT_SOURCE_DIR}/http2.h
   ${CMAKE_CURRENT_SOURCE_DIR}/sigpipe.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/sigpipe.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/smb.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_endian.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_des.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/curl_printf.h
 )
 
 set(CSOURCES ${LIB_CFILES} ${LIB_VTLS_CFILES})

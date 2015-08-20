@@ -4,9 +4,9 @@ set(CMAKE_CURRENT_SOURCE_DIR ${OpenSceneGraph_SOURCE_DIR})
 cmake_policy(SET CMP0017 NEW)
 
 SET(OPENSCENEGRAPH_MAJOR_VERSION 3)
-SET(OPENSCENEGRAPH_MINOR_VERSION 2)
-SET(OPENSCENEGRAPH_PATCH_VERSION 1)
-SET(OPENSCENEGRAPH_SOVERSION 100)
+SET(OPENSCENEGRAPH_MINOR_VERSION 4)
+SET(OPENSCENEGRAPH_PATCH_VERSION 0)
+SET(OPENSCENEGRAPH_SOVERSION 130)
 
 SET(OPENSCENEGRAPH_VERSION ${OPENSCENEGRAPH_MAJOR_VERSION}.${OPENSCENEGRAPH_MINOR_VERSION}.${OPENSCENEGRAPH_PATCH_VERSION})
 
@@ -53,36 +53,176 @@ MARK_AS_ADVANCED(OSG_DISABLE_MSVC_WARNINGS)
 
 OPTION(OSG_USE_REF_PTR_IMPLICIT_OUTPUT_CONVERSION "Set to ON to use the ref_ptr<> T* operator() output conversion. " ON)
 
+# Map the OPENGL_PROFILE to OSG_GL*_AVAILABLE settings
+SET(OPENGL_PROFILE "GL2" CACHE STRING "OpenGL Profile to use, choose from GL1, GL2, GL3, GLES1, GLES2, GLES3")
 
-OPTION(OSG_GL1_AVAILABLE "Set to OFF to disable use of OpenGL 1.x functions library." ON)
-OPTION(OSG_GL2_AVAILABLE "Set to OFF to disable use of OpenGL 2.x functions library." ON)
-OPTION(OSG_GL3_AVAILABLE "Set to OFF to disable use of OpenGL 3.x functions library." OFF)
-OPTION(OSG_GLES1_AVAILABLE "Set to OFF to disable use of OpenGL ES 1.x functions library." OFF)
-OPTION(OSG_GLES2_AVAILABLE "Set to OFF to disable use of OpenGL ES 2.x functions library." OFF)
+IF ((OPENGL_PROFILE STREQUAL "GL1") OR (OPENGL_PROFILE STREQUAL "GL2"))
+    OPTION(OSG_GL1_AVAILABLE "Set to OFF to disable use of OpenGL 1.x functions library." ON )
+ELSE()
+    OPTION(OSG_GL1_AVAILABLE "Set to OFF to disable use of OpenGL 1.x functions library." OFF )
+ENDIF()
+
+IF ((OPENGL_PROFILE STREQUAL "GL2"))
+    OPTION(OSG_GL2_AVAILABLE "Set to OFF to disable use of OpenGL 2.x functions library." ON )
+ELSE()
+    OPTION(OSG_GL2_AVAILABLE "Set to OFF to disable use of OpenGL 2.x functions library." OFF )
+ENDIF()
+
+IF ((OPENGL_PROFILE STREQUAL "GL3") OR (OPENGL_PROFILE STREQUAL "GLCORE"))
+    OPTION(OSG_GL3_AVAILABLE "Set to OFF to disable use of OpenGL 3.x functions library." ON )
+ELSE()
+    OPTION(OSG_GL3_AVAILABLE "Set to OFF to disable use of OpenGL 3.x functions library." OFF )
+ENDIF()
+
+IF ((OPENGL_PROFILE STREQUAL "GLES1"))
+    OPTION(OSG_GLES1_AVAILABLE "Set to OFF to disable use of OpenGL ES 1.x functions library." ON )
+ELSE()
+    OPTION(OSG_GLES1_AVAILABLE "Set to OFF to disable use of OpenGL ES 1.x functions library." OFF )
+ENDIF()
+
+IF ((OPENGL_PROFILE STREQUAL "GLES2"))
+    OPTION(OSG_GLES2_AVAILABLE "Set to OFF to disable use of OpenGL ES 2.x functions library." ON )
+ELSEIF ((OPENGL_PROFILE STREQUAL "GLES3"))
+    OPTION(OSG_GLES2_AVAILABLE "Set to OFF to disable use of OpenGL ES 2.x functions library." ON )
+    OPTION(OSG_GLES3_AVAILABLE "Set to OFF to disable use of OpenGL ES 3.x functions library." ON )
+ELSE()
+    OPTION(OSG_GLES2_AVAILABLE "Set to OFF to disable use of OpenGL ES 2.x functions library." OFF )
+    OPTION(OSG_GLES3_AVAILABLE "Set to OFF to disable use of OpenGL ES 3.x functions library." OFF )
+ENDIF()
+
+
 OPTION(OSG_GL_LIBRARY_STATIC "Set to ON to statically link with OpenGL/GLES library." OFF)
 
 SET(OPENGL_egl_LIBRARY CACHE STRING "Set the OpenGL egl library.")
 
-# SET(OSG_GL_DISPLAYLISTS_AVAILABLE ${OSG_GL1_AVAILABLE})
-# SET(OSG_GL_MATRICES_AVAILABLE ${OSG_GL1_AVAILABLE})
-# SET(OSG_GL_VERTEX_FUNCS_AVAILABLE ${OSG_GL1_AVAILABLE})
-# SET(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE ${OSG_GL1_AVAILABLE})
-# SET(OSG_GL_FIXED_FUNCTION_AVAILABLE ${OSG_GL1_AVAILABLE})
+# Map the OSG_GL*_AVAILABLE settings to OSG_GL_* settings
+IF (OSG_GLES2_AVAILABLE OR OSG_GL3_AVAILABLE)
+    OPTION(OSG_GL_DISPLAYLISTS_AVAILABLE "Set to OFF to disable use of OpenGL display lists." OFF)
+    OPTION(OSG_GL_MATRICES_AVAILABLE "Set to OFF to disable use of OpenGL built-in matrices." OFF)
+    OPTION(OSG_GL_VERTEX_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertex/glColor etc." OFF)
+    OPTION(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertexPointer/glColorPointer etc." OFF)
+    OPTION(OSG_GL_FIXED_FUNCTION_AVAILABLE "Set to OFF to disable use of OpenGL fixed function pipeline." OFF)
+ELSEIF (OSG_GLES1_AVAILABLE)
+    OPTION(OSG_GL_DISPLAYLISTS_AVAILABLE "Set to OFF to disable use of OpenGL display lists." OFF)
+    OPTION(OSG_GL_MATRICES_AVAILABLE "Set to OFF to disable use of OpenGL built-in matrices." ON)
+    OPTION(OSG_GL_VERTEX_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertex/glColor etc." ON)
+    OPTION(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertexPointer/glColorPointer etc." ON)
+    OPTION(OSG_GL_FIXED_FUNCTION_AVAILABLE "Set to OFF to disable use of OpenGL fixed function pipeline." ON)
+ELSE()
+    OPTION(OSG_GL_DISPLAYLISTS_AVAILABLE "Set to OFF to disable use of OpenGL display lists." ON)
+    OPTION(OSG_GL_MATRICES_AVAILABLE "Set to OFF to disable use of OpenGL built-in matrices." ON)
+    OPTION(OSG_GL_VERTEX_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertex/glColor etc." ON)
+    OPTION(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertexPointer/glColorPointer etc." ON)
+    OPTION(OSG_GL_FIXED_FUNCTION_AVAILABLE "Set to OFF to disable use of OpenGL fixed function pipeline." ON)
+ENDIF()
 
-OPTION(OSG_GL_DISPLAYLISTS_AVAILABLE "Set to OFF to disable use of OpenGL display lists." ${OSG_GL1_AVAILABLE})
-OPTION(OSG_GL_MATRICES_AVAILABLE "Set to OFF to disable use of OpenGL built-in matrices." ${OSG_GL1_AVAILABLE})
-OPTION(OSG_GL_VERTEX_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertex/glColor etc." ${OSG_GL1_AVAILABLE})
-OPTION(OSG_GL_VERTEX_ARRAY_FUNCS_AVAILABLE "Set to OFF to disable use of OpenGL vertex functions such as glVertexPointer/glColorPointer etc." ${OSG_GL1_AVAILABLE})
-OPTION(OSG_GL_FIXED_FUNCTION_AVAILABLE "Set to OFF to disable use of OpenGL fixed function pipeline." ${OSG_GL1_AVAILABLE})
+IF (OSG_GLES1_AVAILABLE OR OSG_GLES2_AVAILABLE)
+    OPTION(OSG_CPP_EXCEPTIONS_AVAILABLE "Set to OFF to disable compile of OSG components that use C++ exceptions." OFF)
+ELSE()
+    OPTION(OSG_CPP_EXCEPTIONS_AVAILABLE "Set to OFF to disable compile of OSG components that use C++ exceptions." ON)
+ENDIF()
 
-OPTION(OSG_CPP_EXCEPTIONS_AVAILABLE "Set to OFF to disable compile of OSG components that use C++ exceptions." ON)
+
+# Map the OSG_GL*_AVAILABLE settings to OpenGL header settings
+IF (OSG_GL3_AVAILABLE)
+    IF (APPLE)
+        SET(OPENGL_HEADER1 "#include <OpenGL/gl.h>" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "#include <OpenGL/gl3.h>" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+    ELSE()
+
+        IF (OPENGL_PROFILE STREQUAL "GLCORE")
+            IF(WIN32)
+                FIND_PACKAGE(GLCORE REQUIRED)
+            ENDIF()
+            SET(OPENGL_HEADER1 "#include <GL/glcorearb.h>" CACHE STRING "#include<> line for OpenGL Header")
+            SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+        ELSE()
+            SET(OPENGL_HEADER1 "#include <GL3/gl3.h>" CACHE STRING "#include<> line for OpenGL Header")
+            SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+        ENDIF()
+
+    ENDIF()
+ELSEIF(OSG_GLES1_AVAILABLE)
+    IF (APPLE AND NOT ANDROID)
+        SET(OPENGL_HEADER1 "#include \"TargetConditionals.h\"" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "#include <OpenGLES/ES1/gl.h>" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+    ELSE()
+        SET(OPENGL_HEADER1 "#include <GLES/gl.h>" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+    ENDIF()
+ELSEIF(OSG_GLES2_AVAILABLE)
+    IF (APPLE AND NOT ANDROID)
+        SET(OPENGL_HEADER1 "#include \"TargetConditionals.h\"" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "#include <OpenGLES/ES2/gl.h>" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+        # TODO: GLES3
+    ELSE()
+        SET(OPENGL_HEADER1 "#include <GLES2/gl2.h>" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+        # TODO: GLES3
+    ENDIF()
+ELSE()
+    IF (APPLE)
+        SET(OPENGL_HEADER1 "#include <OpenGL/gl.h>" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+    ELSE()
+        SET(OPENGL_HEADER1 "#include <GL/gl.h>" CACHE STRING "#include<> line for OpenGL Header")
+        SET(OPENGL_HEADER2 "" CACHE STRING "#include<> line for additional OpenGL Headers if required")
+    ENDIF()
+ENDIF()
+
+IF (OSG_GL1_AVAILABLE)
+    SET(OSG_GL1_FEATURES "true")
+ELSE()
+    SET(OSG_GL1_FEATURES "false")
+ENDIF()
+
+IF (OSG_GL2_AVAILABLE)
+    SET(OSG_GL2_FEATURES "true")
+ELSE()
+    SET(OSG_GL2_FEATURES "false")
+ENDIF()
+
+IF (OSG_GL3_AVAILABLE)
+    SET(OSG_GL3_FEATURES "true")
+ELSE()
+    SET(OSG_GL3_FEATURES "false")
+ENDIF()
+
+IF (OSG_GLES1_AVAILABLE)
+    SET(OSG_GLES1_FEATURES "true")
+ELSE()
+    SET(OSG_GLES1_FEATURES "false")
+ENDIF()
+
+IF (OSG_GLES2_AVAILABLE)
+    SET(OSG_GLES2_FEATURES "true")
+ELSE()
+    SET(OSG_GLES2_FEATURES "false")
+ENDIF()
+
+IF (OSG_GLES3_AVAILABLE)
+    SET(OSG_GLES3_FEATURES "true")
+ELSE()
+    SET(OSG_GLES3_FEATURES "false")
+ENDIF()
 
 ################################################################################
-# Set Config file
+# Set Config header file
 
 SET(OPENSCENEGRAPH_CONFIG_HEADER "${PROJECT_BINARY_DIR}/share/openscenegraph/include/osg/Config")
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/osg/Config.in"
                "${OPENSCENEGRAPH_CONFIG_HEADER}")
+
+
+################################################################################
+# Set OpenGL header file
+
+SET(OPENSCENEGRAPH_OPENGL_HEADER "${PROJECT_BINARY_DIR}/share/openscenegraph/include/osg/GL")
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/osg/GL.in"
+               "${OPENSCENEGRAPH_OPENGL_HEADER}")
+
+################################################################################
+# Set Version header file
 
 SET(OPENSCENEGRAPH_VERSION_HEADER "${PROJECT_BINARY_DIR}/share/openscenegraph/include/osg/Version")
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/osg/Version.in"
@@ -134,7 +274,7 @@ SET(OpenThreads_PUBLIC_HEADERS
     ${HEADER_PATH}/ReentrantMutex
     ${HEADER_PATH}/ScopedLock
     ${HEADER_PATH}/Thread
-    ${HEADER_PATH}/Version
+    ${OPENTHREADS_VERSION_HEADER}
     ${OPENTHREADS_CONFIG_HEADER}
 )
 
@@ -187,23 +327,29 @@ SET(TARGET_H
     ${HEADER_PATH}/Billboard
     ${HEADER_PATH}/BlendColor
     ${HEADER_PATH}/BlendEquation
+    ${HEADER_PATH}/BlendEquationi
     ${HEADER_PATH}/BlendFunc
+    ${HEADER_PATH}/BlendFunci
     ${HEADER_PATH}/BoundingBox
     ${HEADER_PATH}/BoundingSphere
     ${HEADER_PATH}/BoundsChecking
     ${HEADER_PATH}/buffered_value
     ${HEADER_PATH}/BufferIndexBinding
     ${HEADER_PATH}/BufferObject
+    ${HEADER_PATH}/BufferTemplate
+    ${HEADER_PATH}/Callback
     ${HEADER_PATH}/Camera
-    ${HEADER_PATH}/CameraNode
     ${HEADER_PATH}/CameraView
+    ${HEADER_PATH}/Capability
     ${HEADER_PATH}/ClampColor
     ${HEADER_PATH}/ClearNode
+    ${HEADER_PATH}/ClipControl
     ${HEADER_PATH}/ClipNode
     ${HEADER_PATH}/ClipPlane
     ${HEADER_PATH}/ClusterCullingCallback
     ${HEADER_PATH}/CollectOccludersVisitor
     ${HEADER_PATH}/ColorMask
+    ${HEADER_PATH}/ColorMaski
     ${HEADER_PATH}/ColorMatrix
     ${HEADER_PATH}/ComputeBoundsVisitor
     ${HEADER_PATH}/ConvexPlanarOccluder
@@ -229,8 +375,8 @@ SET(TARGET_H
     ${HEADER_PATH}/FrontFace
     ${HEADER_PATH}/Geode
     ${HEADER_PATH}/Geometry
-    ${HEADER_PATH}/GL
     ${HEADER_PATH}/GL2Extensions
+    ${HEADER_PATH}/GLDefines
     ${HEADER_PATH}/GLExtensions
     ${HEADER_PATH}/GLBeginEndAdapter
     ${HEADER_PATH}/GLObjects
@@ -295,6 +441,7 @@ SET(TARGET_H
     ${HEADER_PATH}/RenderInfo
     ${HEADER_PATH}/SampleMaski
     ${HEADER_PATH}/Scissor
+    ${HEADER_PATH}/ScriptEngine
     ${HEADER_PATH}/Sequence
     ${HEADER_PATH}/ShadeModel
     ${HEADER_PATH}/Shader
@@ -332,6 +479,7 @@ SET(TARGET_H
     ${HEADER_PATH}/Transform
     ${HEADER_PATH}/TriangleFunctor
     ${HEADER_PATH}/TriangleIndexFunctor
+    ${HEADER_PATH}/Types
     ${HEADER_PATH}/Uniform
     ${HEADER_PATH}/UserDataContainer
     ${HEADER_PATH}/ValueObject
@@ -362,11 +510,13 @@ SET(TARGET_H
     ${HEADER_PATH}/Vec4ub
     ${HEADER_PATH}/Vec4ui
     ${HEADER_PATH}/Vec4us
-    ${HEADER_PATH}/Version
+    ${HEADER_PATH}/VertexAttribDivisor
     ${HEADER_PATH}/VertexProgram
     ${HEADER_PATH}/View
     ${HEADER_PATH}/Viewport
+    ${OPENSCENEGRAPH_VERSION_HEADER}
     ${OPENSCENEGRAPH_CONFIG_HEADER}
+    ${OPENSCENEGRAPH_OPENGL_HEADER}
 )
 
 SET(TARGET_SRC
@@ -381,18 +531,24 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/Billboard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BlendColor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BlendEquation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/BlendEquationi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BlendFunc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/BlendFunci.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BufferIndexBinding.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BufferObject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Callback.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Capability.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Camera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CameraView.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampColor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClearNode.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ClipControl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClipNode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClipPlane.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClusterCullingCallback.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CollectOccludersVisitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorMask.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ColorMaski.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorMatrix.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ComputeBoundsVisitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvexPlanarOccluder.cpp
@@ -417,7 +573,6 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/FrontFace.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Geode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Geometry.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/GL2Extensions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GLExtensions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GLBeginEndAdapter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GLObjects.cpp
@@ -450,7 +605,6 @@ SET(TARGET_SRC
     #    Matrix_implementation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MatrixTransform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Multisample.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/NodeCallback.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Node.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NodeTrackerCallback.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NodeVisitor.cpp
@@ -478,6 +632,7 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/Referenced.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SampleMaski.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Scissor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ScriptEngine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Sequence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ShadeModel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Shader.cpp
@@ -514,10 +669,11 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/Uniform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/UserDataContainer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/VertexAttribDivisor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/VertexProgram.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/View.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Viewport.cpp
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/glu/libutil/error.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/glu/libutil/mipmap.cpp
 
@@ -569,6 +725,8 @@ SET(TARGET_H
     ${HEADER_PATH}/Archive
     ${HEADER_PATH}/AuthenticationMap
     ${HEADER_PATH}/Callbacks
+    ${HEADER_PATH}/ClassInterface
+    ${HEADER_PATH}/ConvertBase64
     ${HEADER_PATH}/ConvertUTF
     ${HEADER_PATH}/DatabasePager
     ${HEADER_PATH}/DatabaseRevisions
@@ -584,6 +742,7 @@ SET(TARGET_H
     ${HEADER_PATH}/ImagePager
     ${HEADER_PATH}/ImageProcessor
     ${HEADER_PATH}/Input
+    ${HEADER_PATH}/ObjectCache
     ${HEADER_PATH}/Output
     ${HEADER_PATH}/Options
     ${HEADER_PATH}/ParameterOutput
@@ -605,6 +764,8 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/Archive.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AuthenticationMap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Callbacks.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ClassInterface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ConvertBase64.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvertUTF.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DatabasePager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DatabaseRevisions.cpp
@@ -622,6 +783,7 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/ImagePager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Input.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MimeTypes.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ObjectCache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Output.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Options.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginQuery.cpp
@@ -674,6 +836,7 @@ SET(TARGET_H
     ${HEADER_PATH}/PolytopeIntersector
     ${HEADER_PATH}/PositionalStateContainer
     ${HEADER_PATH}/PrintVisitor
+    ${HEADER_PATH}/RayIntersector
     ${HEADER_PATH}/ReflectionMapGenerator
     ${HEADER_PATH}/RenderBin
     ${HEADER_PATH}/RenderLeaf
@@ -716,6 +879,7 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/PolytopeIntersector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PositionalStateContainer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PrintVisitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/RayIntersector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderBin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderLeaf.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderStage.cpp
@@ -765,8 +929,11 @@ SET(LIB_NAME osgGA)
 SET(HEADER_PATH ${OpenSceneGraph_SOURCE_DIR}/include/${LIB_NAME})
 SET(TARGET_H
     ${HEADER_PATH}/AnimationPathManipulator
+    ${HEADER_PATH}/CameraViewSwitchManipulator
     ${HEADER_PATH}/DriveManipulator
     ${HEADER_PATH}/Device
+    ${HEADER_PATH}/Event
+    ${HEADER_PATH}/EventHandler
     ${HEADER_PATH}/EventQueue
     ${HEADER_PATH}/EventVisitor
     ${HEADER_PATH}/Export
@@ -786,14 +953,16 @@ SET(TARGET_H
     ${HEADER_PATH}/TerrainManipulator
     ${HEADER_PATH}/TrackballManipulator
     ${HEADER_PATH}/UFOManipulator
+    ${HEADER_PATH}/Widget
     ${HEADER_PATH}/Version
-    ${HEADER_PATH}/CameraViewSwitchManipulator
 )
 
 SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/AnimationPathManipulator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DriveManipulator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Device.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Event.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/EventHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/EventQueue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/EventVisitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FirstPersonManipulator.cpp
@@ -811,6 +980,7 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainManipulator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TrackballManipulator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/UFOManipulator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Widget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CameraViewSwitchManipulator.cpp
 )
@@ -1384,6 +1554,7 @@ set(CMAKE_CURRENT_SOURCE_DIR ${OpenSceneGraph_SOURCE_DIR}/src/osgTerrain)
 SET(LIB_NAME osgTerrain)
 SET(HEADER_PATH ${OpenSceneGraph_SOURCE_DIR}/include/${LIB_NAME})
 SET(TARGET_H
+    ${HEADER_PATH}/DisplacementMappingTechnique
     ${HEADER_PATH}/Export
     ${HEADER_PATH}/Locator
     ${HEADER_PATH}/Layer
@@ -1391,17 +1562,20 @@ SET(TARGET_H
     ${HEADER_PATH}/TerrainTechnique
     ${HEADER_PATH}/Terrain
     ${HEADER_PATH}/GeometryTechnique
+    ${HEADER_PATH}/GeometryPool
     ${HEADER_PATH}/ValidDataOperator
     ${HEADER_PATH}/Version
 )
 
 SET(TARGET_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/DisplacementMappingTechnique.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Layer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Locator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainTile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainTechnique.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Terrain.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GeometryTechnique.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GeometryPool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Version.cpp
 )
 
@@ -2279,7 +2453,10 @@ SET(TARGET_NAME "jpeg")
 
 INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
 
-SET(TARGET_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ReaderWriterJPEG.cpp )
+SET(TARGET_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/EXIF_Orientation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ReaderWriterJPEG.cpp
+)
 
 SET(TARGET_TARGETNAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC})

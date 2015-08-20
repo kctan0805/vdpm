@@ -1,6 +1,6 @@
 /* -*-c++-*- */
 /* osgEarth - Dynamic map generation toolkit for OpenSceneGraph
-* Copyright 2008-2014 Pelican Mapping
+* Copyright 2015 Pelican Mapping
 * http://osgearth.org
 *
 * osgEarth is free software; you can redistribute it and/or modify
@@ -8,10 +8,13 @@
 * the Free Software Foundation; either version 2 of the License, or
 * (at your option) any later version.
 *
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+* IN THE SOFTWARE.
 *
 * You should have received a copy of the GNU Lesser General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>
@@ -79,7 +82,7 @@ main(int argc, char** argv)
 
     // initialize a viewer:
     osgViewer::Viewer viewer(arguments);
-    
+
     EarthManipulator* manip = new EarthManipulator();
     viewer.setCameraManipulator( manip );
 
@@ -89,17 +92,13 @@ main(int argc, char** argv)
     // make the map scene graph:
     MapNode* mapNode = new MapNode( map );
     root->addChild( mapNode );
-    
-    // Process cmdline args.
-    MapNodeHelper helper;
-    helper.configureView( &viewer );
-    helper.parse(mapNode, arguments, &viewer, root, new LabelControl("City Demo"));
 
     // zoom to a good startup position
     manip->setViewpoint( Viewpoint(
+        "Home",
         -71.0763, 42.34425, 0,   // longitude, latitude, altitude
          24.261, -21.6, 3450.0), // heading, pitch, range
-       5.0 );                    // duration
+         5.0 );                    // duration
 
     // This will mitigate near clip plane issues if you zoom in close to the ground:
     LogarithmicDepthBuffer buf;
@@ -133,7 +132,7 @@ void addBuildings(Map* map)
     feature_opt.name() = "buildings";
     feature_opt.url() = BUILDINGS_URL;
     feature_opt.buildSpatialIndex() = true;
-    
+
     // a style for the building data:
     Style buildingStyle;
     buildingStyle.setName( "buildings" );
@@ -157,7 +156,7 @@ void addBuildings(Map* map)
     Style wallStyle;
     wallStyle.setName( "building-wall" );
     SkinSymbol* wallSkin = wallStyle.getOrCreate<SkinSymbol>();
-    wallSkin->libraryName() = "us_resources";
+    wallSkin->library() = "us_resources";
     wallSkin->addTag( "building" );
     wallSkin->randomSeed() = 1;
 
@@ -165,7 +164,7 @@ void addBuildings(Map* map)
     Style roofStyle;
     roofStyle.setName( "building-roof" );
     SkinSymbol* roofSkin = roofStyle.getOrCreate<SkinSymbol>();
-    roofSkin->libraryName() = "us_resources";
+    roofSkin->library() = "us_resources";
     roofSkin->addTag( "rooftop" );
     roofSkin->randomSeed() = 1;
     roofSkin->isTiled() = true;
@@ -175,7 +174,7 @@ void addBuildings(Map* map)
     styleSheet->addStyle( buildingStyle );
     styleSheet->addStyle( wallStyle );
     styleSheet->addStyle( roofStyle );
-    
+
     // load a resource library that contains the building textures.
     ResourceLibrary* reslib = new ResourceLibrary( "us_resources", RESOURCE_LIB_URL );
     styleSheet->addResourceLibrary( reslib );
@@ -206,7 +205,7 @@ void addStreets(Map* map)
     feature_opt.buildSpatialIndex() = true;
 
     // a resampling filter will ensure that the length of each segment falls
-    // within the specified range. That can be helpful to avoid cropping 
+    // within the specified range. That can be helpful to avoid cropping
     // very long lines segments.
     feature_opt.filters().push_back( new ResampleFilter(0.0, 25.0) );
 
@@ -268,7 +267,7 @@ void addParks(Map* map)
     model->scale()->setLiteral( 0.2 );
     model->placement() = model->PLACEMENT_RANDOM;
     model->density() = 3000.0f; // instances per sqkm
-    
+
     // Clamp to the terrain:
     AltitudeSymbol* alt = style.getOrCreate<AltitudeSymbol>();
     alt->clamping() = alt->CLAMP_TO_TERRAIN;

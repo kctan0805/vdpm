@@ -1,6 +1,6 @@
 /* -*-c++-*- */
 /* osgEarth - Dynamic map generation toolkit for OpenSceneGraph
-* Copyright 2008-2014 Pelican Mapping
+* Copyright 2015 Pelican Mapping
 * http://osgearth.org
 *
 * osgEarth is free software; you can redistribute it and/or modify
@@ -8,10 +8,13 @@
 * the Free Software Foundation; either version 2 of the License, or
 * (at your option) any later version.
 *
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+* IN THE SOFTWARE.
 *
 * You should have received a copy of the GNU Lesser General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>
@@ -21,6 +24,10 @@
 #include <osgEarth/Notify>
 #include <osgEarthUtil/EarthManipulator>
 #include <osgEarthUtil/ExampleResources>
+
+#include <osgEarth/Units>
+#include <osgEarth/Viewpoint>
+
 #include "osgPlugins.h"
 
 #define LC "[viewer] "
@@ -31,7 +38,7 @@ using namespace osgEarth::Util;
 int
 usage(const char* name)
 {
-    OE_NOTICE 
+    OE_NOTICE
         << "\nUsage: " << name << " file.earth" << std::endl
         << MapNodeHelper().usage() << std::endl;
 
@@ -60,13 +67,12 @@ main(int argc, char** argv)
     viewer.setCameraManipulator( new EarthManipulator() );
 
     // load an earth file, and support all or our example command-line options
-    // and earth file <external> tags    
+    // and earth file <external> tags
     osg::Node* node = MapNodeHelper().load( arguments, &viewer );
     if ( node )
     {
         viewer.setSceneData( node );
 
-        viewer.getCamera()->setNearFarRatio(0.00002);
         viewer.getCamera()->setSmallFeatureCullingPixelSize(-1.0f);
 
         return viewer.run();

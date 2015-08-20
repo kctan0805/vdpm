@@ -1,3 +1,20 @@
+/* vdpm - View-dependent progressive meshes library
+* Copyright 2015 Jim Tan
+* https://github.com/kctan0805/vdpm
+*
+* osgEarth is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>
+*/
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -118,7 +135,7 @@ int SRMesh::realize(Renderer* renderer)
     vstack = (VertexPointer*)::malloc(sizeof(VertexPointer) * VSTACK_SIZE);
     if (!vstack)
         goto error;
-    
+
     indicesBuffer = (unsigned int*)::malloc(sizeof(unsigned int) * INDICES_BUFFER_SIZE);
     if (!indicesBuffer)
         goto error;
@@ -370,7 +387,7 @@ void SRMesh::adaptRefine()
         VMorph* vmorph = avertex->vmorph;
     #endif
 
-        if (vs->i != UINT_MAX && !outsideViewFrustum(vs) && 
+        if (vs->i != UINT_MAX && !outsideViewFrustum(vs) &&
         #ifdef VDPM_ORIENTED_AWAY
             !orientedAway(vs) &&
         #endif
@@ -980,7 +997,7 @@ void SRMesh::printStatus()
     {
         unsigned int i = avertex->i;
         VGeom* vgeom = getVGeom(i);
-        
+
         avertexNext = avertex->next;
 
         Log::println("v[%d] p:{%f %f %f}", i, vgeom->point.x, vgeom->point.y, vgeom->point.z);

@@ -1,3 +1,20 @@
+/* osgVdpm - View-dependent progressive meshes for OpenSceneGraph
+* Copyright 2015 Jim Tan
+* https://github.com/kctan0805/vdpm
+*
+* osgEarth is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>
+*/
 #include "vdpm/OpenGLRenderer.h"
 #include "vdpm/SRMesh.h"
 #include "vdpm/Viewport.h"
@@ -25,12 +42,13 @@ SRMeshDrawable::~SRMeshDrawable()
     delete viewport;
 }
 
-BoundingBox SRMeshDrawable::computeBound() const
+BoundingSphere SRMeshDrawable::computeBound() const
 {
     const vdpm::Bounds& bounds = srmesh->getBounds();
-    BoundingBox bbox(bounds.min.x, bounds.min.y, bounds.min.z, bounds.max.x, bounds.max.y, bounds.max.z);
+	osg::Vec3f center(bounds.center.x, bounds.center.y, bounds.center.z);
+	BoundingSphere bs(center, bounds.radius);
 
-    return bbox;
+    return bs;
 }
 
 void SRMeshDrawable::drawImplementation(RenderInfo& renderInfo) const

@@ -24,7 +24,6 @@ if (DEFINED CFG_USE_OSGEARTH)
         osgdb_osgearth_engine_byo
         osgdb_osgearth_engine_mp
         osgdb_osgearth_label_annotation
-        osgdb_osgearth_label_overlay
         osgdb_osgearth_mask_feature
         osgdb_osgearth_model_feature_geom
         osgdb_osgearth_model_feature_stencil
@@ -34,7 +33,6 @@ if (DEFINED CFG_USE_OSGEARTH)
         osgdb_osgearth_gdal
         osgdb_osgearth_colorramp
         osgdb_osgearth_splat_mask
-        osgdb_osgearth_noise
         osgdb_osgearth_tileindex
         osgdb_osgearth_bing
         osgdb_osgearth_xyz

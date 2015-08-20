@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.4 FATAL_ERROR)
 
 SET(OSGEARTH_MAJOR_VERSION 2)
-SET(OSGEARTH_MINOR_VERSION 5)
+SET(OSGEARTH_MINOR_VERSION 6)
 SET(OSGEARTH_PATCH_VERSION 0)
 SET(OSGEARTH_SOVERSION     0)
 
@@ -34,9 +34,45 @@ ADD_DEFINITIONS(-DOSGEARTH_LIBRARY_STATIC)
 
 # osgEarth
 
+ADD_DEFINITIONS(-DTIXML_USE_STL)
+
 SET(LIB_NAME osgEarth)
 
 set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/${LIB_NAME})
+
+set(TARGET_GLSL
+    AlphaEffect.frag.glsl
+    DepthOffset.vert.glsl
+    Draping.vert.glsl
+    Draping.frag.glsl
+    GPUClamping.vert.glsl
+    GPUClamping.vert.lib.glsl
+    GPUClamping.frag.glsl
+    Instancing.vert.glsl)
+
+set(SHADERS_CPP "${CMAKE_CURRENT_BINARY_DIR}/osgEarth/AutoGenShaders.cpp")
+
+# set up configure variables:
+set(TEMPLATE_FILE   Shaders.cpp.in )
+set(GLSL_FILES      ${TARGET_GLSL} )
+set(OUTPUT_CPP_FILE ${SHADERS_CPP})
+
+# generate the build-time script that will create out cpp file with inline shaders:
+configure_file(
+	"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/osgEarth/ConfigureShaders.cmake"
+	@ONLY)
+
+# add the custom build-time command to run the script:
+add_custom_command(
+	OUTPUT
+		"${OUTPUT_CPP_FILE}"
+	COMMAND
+		"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/osgEarth/ConfigureShaders.cmake"
+	DEPENDS
+		${GLSL_FILES}
+		"${TEMPLATE_FILE}"
+		"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in" )
 
 SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/AlphaEffect
@@ -48,6 +84,7 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/CachePolicy
     ${CMAKE_CURRENT_SOURCE_DIR}/CacheSeed
     ${CMAKE_CURRENT_SOURCE_DIR}/Capabilities
+    ${CMAKE_CURRENT_SOURCE_DIR}/Clamping
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampableNode
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampingTechnique
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorFilter
@@ -61,15 +98,16 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/Decluttering
     ${CMAKE_CURRENT_SOURCE_DIR}/DepthOffset
     ${CMAKE_CURRENT_SOURCE_DIR}/DPLineSegmentIntersector
-    ${CMAKE_CURRENT_SOURCE_DIR}/Draggers
     ${CMAKE_CURRENT_SOURCE_DIR}/DrapeableNode
     ${CMAKE_CURRENT_SOURCE_DIR}/DrapingTechnique
     ${CMAKE_CURRENT_SOURCE_DIR}/DrawInstanced
     ${CMAKE_CURRENT_SOURCE_DIR}/ECEF
+    ${CMAKE_CURRENT_SOURCE_DIR}/ElevationField
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationLayer
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationLOD
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationQuery
     ${CMAKE_CURRENT_SOURCE_DIR}/Export
+    ${CMAKE_CURRENT_SOURCE_DIR}/Extension
     ${CMAKE_CURRENT_SOURCE_DIR}/FadeEffect
     ${CMAKE_CURRENT_SOURCE_DIR}/FileUtils
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoCommon
@@ -78,6 +116,7 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoMath
 	${CMAKE_CURRENT_SOURCE_DIR}/GeoTransform
     ${CMAKE_CURRENT_SOURCE_DIR}/HeightFieldUtils
+    ${CMAKE_CURRENT_SOURCE_DIR}/Horizon
     ${CMAKE_CURRENT_SOURCE_DIR}/HTTPClient
     ${CMAKE_CURRENT_SOURCE_DIR}/ImageLayer
     ${CMAKE_CURRENT_SOURCE_DIR}/ImageMosaic
@@ -104,24 +143,28 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/MemCache
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelLayer
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelSource
+    ${CMAKE_CURRENT_SOURCE_DIR}/NativeProgramAdapter
     ${CMAKE_CURRENT_SOURCE_DIR}/NodeUtils
     ${CMAKE_CURRENT_SOURCE_DIR}/Notify
     ${CMAKE_CURRENT_SOURCE_DIR}/optional
+    ${CMAKE_CURRENT_SOURCE_DIR}/ObjectIndex
     ${CMAKE_CURRENT_SOURCE_DIR}/OverlayDecorator
     ${CMAKE_CURRENT_SOURCE_DIR}/OverlayNode
 	${CMAKE_CURRENT_SOURCE_DIR}/PhongLightingEffect
-    ${CMAKE_CURRENT_SOURCE_DIR}/Pickers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Picker
+    ${CMAKE_CURRENT_SOURCE_DIR}/IntersectionPicker
     ${CMAKE_CURRENT_SOURCE_DIR}/PrimitiveIntersector
     ${CMAKE_CURRENT_SOURCE_DIR}/Profile
+    ${CMAKE_CURRENT_SOURCE_DIR}/Profiler
     ${CMAKE_CURRENT_SOURCE_DIR}/Progress
     ${CMAKE_CURRENT_SOURCE_DIR}/Random
     ${CMAKE_CURRENT_SOURCE_DIR}/Registry
     ${CMAKE_CURRENT_SOURCE_DIR}/Revisioning
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderFactory
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderGenerator
+    ${CMAKE_CURRENT_SOURCE_DIR}/ShaderLoader
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderUtils
 	${CMAKE_CURRENT_SOURCE_DIR}/SharedSARepo
-    ${CMAKE_CURRENT_SOURCE_DIR}/SparseTexture2DArray
     ${CMAKE_CURRENT_SOURCE_DIR}/SpatialReference
     ${CMAKE_CURRENT_SOURCE_DIR}/StateSetCache
 	${CMAKE_CURRENT_SOURCE_DIR}/StateSetLOD
@@ -132,12 +175,13 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainLayer
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainOptions
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainEngineNode
+    ${CMAKE_CURRENT_SOURCE_DIR}/TerrainTileNode
     ${CMAKE_CURRENT_SOURCE_DIR}/Tessellator
     ${CMAKE_CURRENT_SOURCE_DIR}/TextureCompositor
     ${CMAKE_CURRENT_SOURCE_DIR}/TileKey
     ${CMAKE_CURRENT_SOURCE_DIR}/TileHandler
-    ${CMAKE_CURRENT_SOURCE_DIR}/TileVisitor
     ${CMAKE_CURRENT_SOURCE_DIR}/TileSource
+    ${CMAKE_CURRENT_SOURCE_DIR}/TileVisitor
     ${CMAKE_CURRENT_SOURCE_DIR}/TimeControl
     ${CMAKE_CURRENT_SOURCE_DIR}/TraversalData
     ${CMAKE_CURRENT_SOURCE_DIR}/ThreadingUtils
@@ -160,9 +204,7 @@ SET(TINYXML_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/tinyxmlparser.cpp
 )
 
-ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
-    ${LIB_PUBLIC_HEADERS}
-    ${TINYXML_SRC}
+set(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/AlphaEffect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AutoScale.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Bounds.cpp
@@ -171,6 +213,7 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/CachePolicy.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CacheSeed.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Capabilities.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Clamping.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampableNode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampingTechnique.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorFilter.cpp
@@ -181,15 +224,16 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/DateTime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Decluttering.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DepthOffset.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Draggers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DPLineSegmentIntersector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DrapeableNode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DrapingTechnique.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DrawInstanced.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ECEF.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ElevationField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationLayer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationLOD.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ElevationQuery.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Extension.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FadeEffect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FileUtils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoData.cpp
@@ -197,6 +241,7 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/GeoMath.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/GeoTransform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/HeightFieldUtils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Horizon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/HTTPClient.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ImageLayer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ImageMosaic.cpp
@@ -223,20 +268,22 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelSource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NodeUtils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Notify.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ObjectIndex.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OverlayDecorator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OverlayNode.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/PhongLightingEffect.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Pickers.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/IntersectionPicker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PrimitiveIntersector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Profile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Profiler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Progress.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Random.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Registry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Revisioning.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderFactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderGenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ShaderLoader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderUtils.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/SparseTexture2DArray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SpatialReference.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/StateSetCache.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/StateSetLOD.cpp
@@ -263,6 +310,12 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/Viewpoint.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/VirtualProgram.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/XmlUtils.cpp
+    ${SHADERS_CPP} )
+
+ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
+    ${LIB_PUBLIC_HEADERS}
+    ${TINYXML_SRC}
+    ${TARGET_SRC}
 )
 
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIR} ${CURL_INCLUDE_DIR} )
@@ -446,39 +499,40 @@ SET(HEADERS_ROOT
     ${CMAKE_CURRENT_SOURCE_DIR}/ContourMap
     ${CMAKE_CURRENT_SOURCE_DIR}/ClampCallback
     ${CMAKE_CURRENT_SOURCE_DIR}/DataScanner
-    ${CMAKE_CURRENT_SOURCE_DIR}/DateTime
-    ${CMAKE_CURRENT_SOURCE_DIR}/DetailTexture
     ${CMAKE_CURRENT_SOURCE_DIR}/EarthManipulator
-	${CMAKE_CURRENT_SOURCE_DIR}/Ephemeris
+    ${CMAKE_CURRENT_SOURCE_DIR}/Ephemeris
     ${CMAKE_CURRENT_SOURCE_DIR}/ExampleResources
-    ${CMAKE_CURRENT_SOURCE_DIR}/Export
-    ${CMAKE_CURRENT_SOURCE_DIR}/FeatureManipTool
+	${CMAKE_CURRENT_SOURCE_DIR}/Export
     ${CMAKE_CURRENT_SOURCE_DIR}/FeatureQueryTool
     ${CMAKE_CURRENT_SOURCE_DIR}/Fog
     ${CMAKE_CURRENT_SOURCE_DIR}/Formatter
     ${CMAKE_CURRENT_SOURCE_DIR}/GeodeticGraticule
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleExtension
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleNode
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleOptions
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleTerrainEffect
     ${CMAKE_CURRENT_SOURCE_DIR}/HTM
     ${CMAKE_CURRENT_SOURCE_DIR}/LatLongFormatter
     ${CMAKE_CURRENT_SOURCE_DIR}/LineOfSight
     ${CMAKE_CURRENT_SOURCE_DIR}/LinearLineOfSight
-    ${CMAKE_CURRENT_SOURCE_DIR}/LODBlending
-	${CMAKE_CURRENT_SOURCE_DIR}/LogarithmicDepthBuffer
+	${CMAKE_CURRENT_SOURCE_DIR}/LODBlending
+    ${CMAKE_CURRENT_SOURCE_DIR}/LogarithmicDepthBuffer
     ${CMAKE_CURRENT_SOURCE_DIR}/MeasureTool
     ${CMAKE_CURRENT_SOURCE_DIR}/MGRSFormatter
     ${CMAKE_CURRENT_SOURCE_DIR}/MGRSGraticule
     ${CMAKE_CURRENT_SOURCE_DIR}/MouseCoordsTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/NormalMap
     ${CMAKE_CURRENT_SOURCE_DIR}/ObjectLocator
     ${CMAKE_CURRENT_SOURCE_DIR}/Ocean
     ${CMAKE_CURRENT_SOURCE_DIR}/PolyhedralLineOfSight
     ${CMAKE_CURRENT_SOURCE_DIR}/RadialLineOfSight
-	${CMAKE_CURRENT_SOURCE_DIR}/Shadowing
-	${CMAKE_CURRENT_SOURCE_DIR}/SimplexNoise
+	${CMAKE_CURRENT_SOURCE_DIR}/RTTPicker
+	${CMAKE_CURRENT_SOURCE_DIR}/Shaders
+    ${CMAKE_CURRENT_SOURCE_DIR}/Shadowing
+    ${CMAKE_CURRENT_SOURCE_DIR}/SimplexNoise
     ${CMAKE_CURRENT_SOURCE_DIR}/Sky
     ${CMAKE_CURRENT_SOURCE_DIR}/SpatialData
-    ${CMAKE_CURRENT_SOURCE_DIR}/StarData
+	${CMAKE_CURRENT_SOURCE_DIR}/StarData
     ${CMAKE_CURRENT_SOURCE_DIR}/TerrainProfile
-	${CMAKE_CURRENT_SOURCE_DIR}/TextureSplatter
     ${CMAKE_CURRENT_SOURCE_DIR}/TileIndex
     ${CMAKE_CURRENT_SOURCE_DIR}/TileIndexBuilder
     ${CMAKE_CURRENT_SOURCE_DIR}/TFS
@@ -492,6 +546,42 @@ SET(HEADERS_ROOT
     ${CMAKE_CURRENT_SOURCE_DIR}/WMS
 )
 
+set(SHADERS_CPP
+    "${CMAKE_CURRENT_BINARY_DIR}/osgEarthUtil/AutoGenShaders.cpp")
+
+set(TARGET_GLSL
+    ContourMap.vert.glsl
+    ContourMap.frag.glsl
+    Fog.vert.glsl
+    Fog.frag.glsl
+    Graticule.vert.glsl
+    Graticule.frag.glsl
+    LogDepthBuffer.vert.glsl
+    LogDepthBuffer.VertOnly.vert.glsl
+    LogDepthBuffer.frag.glsl )
+
+# set up configure variables:
+set(TEMPLATE_FILE   Shaders.cpp.in )
+set(GLSL_FILES      ${TARGET_GLSL} )
+set(OUTPUT_CPP_FILE ${SHADERS_CPP})
+
+# generate the build-time script that will create out cpp file with inline shaders:
+configure_file(
+	"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/osgEarthUtil/ConfigureShaders.cmake"
+	@ONLY)
+
+# add the custom build-time command to run the script:
+add_custom_command(
+	OUTPUT
+		"${OUTPUT_CPP_FILE}"
+	COMMAND
+		"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/osgEarthUtil/ConfigureShaders.cmake"
+	DEPENDS
+		${GLSL_FILES}
+		"${TEMPLATE_FILE}"
+		"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in" )
+
 SET(SOURCES_ROOT
 	${CMAKE_CURRENT_SOURCE_DIR}/ActivityMonitorTool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AnnotationEvents.cpp
@@ -502,34 +592,34 @@ SET(SOURCES_ROOT
     ${CMAKE_CURRENT_SOURCE_DIR}/Controls.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ContourMap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DataScanner.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/DetailTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/EarthManipulator.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Ephemeris.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ExampleResources.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/FeatureManipTool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Ephemeris.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ExampleResources.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FeatureQueryTool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Fog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GeodeticGraticule.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleExtension.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleTerrainEffect.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraticuleNode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/HTM.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/LatLongFormatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/LinearLineOfSight.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/LODBlending.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/LogarithmicDepthBuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/LODBlending.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MeasureTool.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MGRSFormatter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MGRSGraticule.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MouseCoordsTool.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/NormalMap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ObjectLocator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Ocean.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PolyhedralLineOfSight.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RadialLineOfSight.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/RTTPicker.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Shadowing.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/SimplexNoise.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SimplexNoise.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SpatialData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Sky.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/TerrainProfile.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/TextureSplatter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/TerrainProfile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TileIndex.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TileIndexBuilder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TFS.cpp
@@ -541,6 +631,7 @@ SET(SOURCES_ROOT
     ${CMAKE_CURRENT_SOURCE_DIR}/VerticalScale.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/WFS.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/WMS.cpp
+    ${SHADERS_CPP}
 )
 
 SET(HEADERS_COLORFILTER
@@ -591,6 +682,7 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/AltitudeSymbol
     ${CMAKE_CURRENT_SOURCE_DIR}/Common
     ${CMAKE_CURRENT_SOURCE_DIR}/Color
+    ${CMAKE_CURRENT_SOURCE_DIR}/CoverageSymbol
     ${CMAKE_CURRENT_SOURCE_DIR}/CssUtils
     ${CMAKE_CURRENT_SOURCE_DIR}/Expression
     ${CMAKE_CURRENT_SOURCE_DIR}/ExtrusionSymbol
@@ -607,6 +699,7 @@ SET(LIB_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/MarkerResource
     ${CMAKE_CURRENT_SOURCE_DIR}/MarkerSymbol
     ${CMAKE_CURRENT_SOURCE_DIR}/MeshConsolidator
+    ${CMAKE_CURRENT_SOURCE_DIR}/MeshFlattener
     ${CMAKE_CURRENT_SOURCE_DIR}/MeshSubdivider
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelResource
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelSymbol
@@ -634,6 +727,7 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/AGG.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AltitudeSymbol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CoverageSymbol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CssUtils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Expression.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExtrusionSymbol.cpp
@@ -650,6 +744,7 @@ ADD_LIBRARY(${LIB_NAME} ${OSGEARTH_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${CMAKE_CURRENT_SOURCE_DIR}/MarkerResource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MarkerSymbol.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MeshConsolidator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/MeshFlattener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MeshSubdivider.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelResource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ModelSymbol.cpp
@@ -1033,17 +1128,6 @@ SET(TARGET_TARGETNAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
 ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC} ${TARGET_H})
 
-# osgearth_noise
-set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/osgEarthDrivers/noise)
-SET(TARGET_NAME "osgearth_noise")
-
-SET(TARGET_SRC ${CMAKE_CURRENT_SOURCE_DIR}/NoiseDriver.cpp)
-SET(TARGET_H   ${CMAKE_CURRENT_SOURCE_DIR}/NoiseOptions)
-
-SET(TARGET_TARGETNAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
-
-ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC} ${TARGET_H})
-
 # osgearth_splat_mask
 set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/osgEarthDrivers/splat_mask)
 SET(TARGET_NAME "osgearth_splat_mask")
@@ -1176,17 +1260,6 @@ SET(TARGET_TARGETNAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
 ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC} ${TARGET_H})
 
-# osgearth_label_overlay
-set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/osgEarthDrivers/label_overlay)
-SET(TARGET_NAME "osgearth_label_overlay")
-
-SET(TARGET_SRC ${CMAKE_CURRENT_SOURCE_DIR}/OverlayLabelSource.cpp)
-SET(TARGET_H ${CMAKE_CURRENT_SOURCE_DIR}/OverlayLabelSource)
-
-SET(TARGET_TARGETNAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
-
-ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC} ${TARGET_H})
-
 # osgearth_label_annotation
 set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/osgEarthDrivers/label_annotation)
 SET(TARGET_NAME "osgearth_label_annotation")
@@ -1202,7 +1275,37 @@ ADD_LIBRARY(${TARGET_TARGETNAME} STATIC ${TARGET_SRC} ${TARGET_H})
 set(CMAKE_CURRENT_SOURCE_DIR ${OSGEARTH_SOURCE_DIR}/src/osgEarthDrivers/engine_mp)
 SET(TARGET_NAME "osgearth_engine_mp")
 
+set(TARGET_GLSL
+    MPEngine.vert.model.glsl
+    MPEngine.vert.view.glsl
+    MPEngine.frag.glsl)
+
+set(SHADERS_CPP "${CMAKE_CURRENT_BINARY_DIR}/osgEarthDrivers/engine_mp/AutoGenShaders.cpp")
+
+# set up configure variables:
+set(TEMPLATE_FILE   MPShaders.cpp.in )
+set(GLSL_FILES      ${TARGET_GLSL} )
+set(OUTPUT_CPP_FILE ${SHADERS_CPP})
+
+# generate the build-time script that will create out cpp file with inline shaders:
+configure_file(
+	"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in"
+	"${CMAKE_CURRENT_BINARY_DIR}/osgEarthDrivers/engine_mp/ConfigureShaders.cmake"
+	@ONLY)
+
+# add the custom build-time command to run the script:
+add_custom_command(
+	OUTPUT
+		"${OUTPUT_CPP_FILE}"
+	COMMAND
+		"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/osgEarthDrivers/engine_mp/ConfigureShaders.cmake"
+	DEPENDS
+		${GLSL_FILES}
+		"${TEMPLATE_FILE}"
+		"${OSGEARTH_SOURCE_DIR}/CMakeModules/ConfigureShaders.cmake.in" )
+
 SET(TARGET_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/HeightFieldCache.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/KeyNodeFactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MPGeometry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MPTerrainEngineNode.cpp
@@ -1216,14 +1319,17 @@ SET(TARGET_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/TileNodeRegistry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TileModelFactory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TilePagedLOD.cpp
+    ${SHADERS_CPP}
 )
 
 SET(TARGET_H
     ${CMAKE_CURRENT_SOURCE_DIR}/Common
     ${CMAKE_CURRENT_SOURCE_DIR}/DynamicLODScaleCallback
+    ${CMAKE_CURRENT_SOURCE_DIR}/HeightFieldCache
     ${CMAKE_CURRENT_SOURCE_DIR}/FileLocationCallback
     ${CMAKE_CURRENT_SOURCE_DIR}/KeyNodeFactory
     ${CMAKE_CURRENT_SOURCE_DIR}/MPGeometry
+    ${CMAKE_CURRENT_SOURCE_DIR}/MPShaders
     ${CMAKE_CURRENT_SOURCE_DIR}/MPTerrainEngineNode
     ${CMAKE_CURRENT_SOURCE_DIR}/MPTerrainEngineOptions
     ${CMAKE_CURRENT_SOURCE_DIR}/QuickReleaseGLObjects
