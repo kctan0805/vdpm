@@ -17,7 +17,9 @@
 #if defined(_MSC_VER) && (_MSC_VER < 1500)
 #  define vsnprintf _vsnprintf
 #endif
-#define snprintf _snprintf
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#  define snprintf _snprintf
+#endif
 
 #define HAVE_GETCWD 1
 /* gmt_notunix.h from GMT project also redefines getcwd. See #3138 */
@@ -116,4 +118,3 @@
 #pragma warning(disable: 4786)
 
 /* #define CPL_DISABLE_DLL */
-

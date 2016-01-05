@@ -261,8 +261,8 @@ set(HAVE_LIBPNG 1)
 #######################################################################
 
 # generate FLTKConfig.cmake for build directory use
-set(INCLUDE_DIRS "@FLTK_INCLUDE_DIRS@")
-set(CONFIG_PATH @FLTK_BINARY_DIR@)
+set(INCLUDE_DIRS ${FLTK_INCLUDE_DIRS})
+set(CONFIG_PATH ${FLTK_BINARY_DIR})
 
 configure_file(
    ${FLTK_SOURCE_DIR}/CMake/FLTKConfig.cmake.in
