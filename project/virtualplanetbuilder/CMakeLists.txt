@@ -5,44 +5,44 @@ INCLUDE_DIRECTORIES(
 )
 
 # applications
-SET(TARGET_DEFAULT_PREFIX "application_")
+SET(TARGET_DEFAULT_PREFIX "")
 
 # osgdem
-set(SRC_DIR ${VIRTUALPLANETBUILDER_SOURCE_DIR}/applications/osgdem)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/applications/osgdem)
 SET(TARGET_NAME "osgdem")
 SET(CMAKE_PROJECT_NAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
-SET(TARGET_SRC ${SRC_DIR}/osgdem.cpp )
+SET(TARGET_SRC ${SRC_DIR}/osgdem.cpp ${SRC_DIR}/osgPlugins.h )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${TARGET_SRC})
 include(${PROJECT_SOURCE_DIR}/config/link.cmake)
 
 # vpbcache
-set(SRC_DIR ${VIRTUALPLANETBUILDER_SOURCE_DIR}/applications/vpbcache)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/applications/vpbcache)
 SET(TARGET_NAME "vpbcache")
 SET(CMAKE_PROJECT_NAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
-SET(TARGET_SRC ${SRC_DIR}/vpbcache.cpp )
+SET(TARGET_SRC ${SRC_DIR}/vpbcache.cpp ${SRC_DIR}/osgPlugins.h )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${TARGET_SRC})
 include(${PROJECT_SOURCE_DIR}/config/link.cmake)
 
 # vpbmaster
-set(SRC_DIR ${VIRTUALPLANETBUILDER_SOURCE_DIR}/applications/vpbmaster)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/applications/vpbmaster)
 SET(TARGET_NAME "vpbmaster")
 SET(CMAKE_PROJECT_NAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
-SET(TARGET_SRC ${SRC_DIR}/vpbmaster.cpp )
+SET(TARGET_SRC ${SRC_DIR}/vpbmaster.cpp ${SRC_DIR}/osgPlugins.h )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${TARGET_SRC})
 include(${PROJECT_SOURCE_DIR}/config/link.cmake)
 
 # vpbsizes
-set(SRC_DIR ${VIRTUALPLANETBUILDER_SOURCE_DIR}/applications/vpbsizes)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/applications/vpbsizes)
 SET(TARGET_NAME "vpbsizes")
 SET(CMAKE_PROJECT_NAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
 
-SET(TARGET_SRC ${SRC_DIR}/vpbsizes.cpp )
+SET(TARGET_SRC ${SRC_DIR}/vpbsizes.cpp ${SRC_DIR}/osgPlugins.h )
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${TARGET_SRC})
 include(${PROJECT_SOURCE_DIR}/config/link.cmake)

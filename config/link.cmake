@@ -73,6 +73,7 @@ if (DEFINED CFG_USE_OPENSCENEGRAPH)
     target_link_libraries(${CMAKE_PROJECT_NAME}
         osgdb_zip
         osgdb_freetype
+        osgdb_nvtt
         osgdb_shp
         osgdb_tgz
         osgdb_osgtgz
@@ -214,6 +215,12 @@ endif()
 if (DEFINED CFG_USE_MESH)
     target_link_libraries(${CMAKE_PROJECT_NAME}
         mesh
+        )
+endif()
+
+if (DEFINED CFG_USE_NVTT)
+    target_link_libraries(${CMAKE_PROJECT_NAME}
+        nvtt
         )
 endif()
 

@@ -26,12 +26,12 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 
-PROJECT(VIRTUALPLANETBUILDER)
+PROJECT(VirtualPlanetBuilder)
 
-SET(VIRTUALPLANETBUILDER_MAJOR_VERSION 0)
-SET(VIRTUALPLANETBUILDER_MINOR_VERSION 9)
-SET(VIRTUALPLANETBUILDER_PATCH_VERSION 13)
-SET(VIRTUALPLANETBUILDER_SOVERSION 13)
+SET(VIRTUALPLANETBUILDER_MAJOR_VERSION 1)
+SET(VIRTUALPLANETBUILDER_MINOR_VERSION 1)
+SET(VIRTUALPLANETBUILDER_PATCH_VERSION 0)
+SET(VIRTUALPLANETBUILDER_SOVERSION 30)
 
 # set to 0 when not a release candidate, non zero means that any generated
 # svn tags will be treated as release candidates of given number
@@ -44,7 +44,7 @@ SET(VIRTUALPLANETBUILDER_SONAMES TRUE)
 
 # We have some custom .cmake scripts not in the official distribution.
 # Maybe this can be used override existing behavior if needed?
-SET(CMAKE_MODULE_PATH "${VIRTUALPLANETBUILDER_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+SET(CMAKE_MODULE_PATH "${VirtualPlanetBuilder_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
 
 # Okay, here's the problem: On some platforms, linking against OpenThreads
@@ -69,20 +69,20 @@ IF (VPB_MAINTAINER)
 
     SET(VIRTUALPLANETBUILDER_SVN "trunk")
     #SET(VIRTUALPLANETBUILDER_SVN "branches")
-    SET(VIRTUALPLANETBUILDER_BRANCH VIRTUALPLANETBUILDER-${VIRTUALPLANETBUILDER_MAJOR_VERSION}.${VIRTUALPLANETBUILDER_MINOR_VERSION})
+    SET(VIRTUALPLANETBUILDER_BRANCH VirtualPlanetBuilder-${VIRTUALPLANETBUILDER_MAJOR_VERSION}.${VIRTUALPLANETBUILDER_MINOR_VERSION})
 
     #
     # Provide target for tagging a release
     #
     SET(SVNCOMMAND svn)
-    SET(SVNTRUNKDIR     http://www.openscenegraph.org/svn/VirtualPlanetBuilder/trunk)
-    SET(SVNTAGDIR       http://www.openscenegraph.org/svn/VirtualPlanetBuilder/tags)
-    SET(SVNBRANCHDIR    http://www.openscenegraph.org/svn/VirtualPlanetBuilder/branch)
+    SET(SVNTRUNKDIR     http://svn.openscenegraph.org/VirtualPlanetBuilder/trunk)
+    SET(SVNTAGDIR       http://svn.openscenegraph.org/VirtualPlanetBuilder/tags)
+    SET(SVNBRANCHDIR    http://svn.openscenegraph.org/VirtualPlanetBuilder/branches)
 
     IF   (VIRTUALPLANETBUILDER_SVN STREQUAL "trunk")
         SET(SVNSOURCEDIR ${SVNTRUNKDIR})
     ELSE ()
-        SET(SVNSOURCEDIR ${SVNBRANCH_DIR}/${VIRTUALPLANETBUILDER_BRANCH})
+        SET(SVNSOURCEDIR ${SVNBRANCHDIR}/${VIRTUALPLANETBUILDER_BRANCH})
     ENDIF()
 
 
@@ -137,7 +137,7 @@ ENDIF()
 
 # Make the headers visible to everything
 INCLUDE_DIRECTORIES(
-    ${VIRTUALPLANETBUILDER_SOURCE_DIR}/include
+    ${VirtualPlanetBuilder_SOURCE_DIR}/include
     ${OPENGL_INCLUDE_DIR}
 )
 
@@ -171,7 +171,7 @@ SET(3rdPartyRoot "" CACHE PATH "set to base 3rd party dependancy path")
 
 SET(CMAKE_DEBUG_POSTFIX  "d")
 
-FIND_PACKAGE(OpenSceneGraph 2.9.8 REQUIRED osgDB osgFX osgUtil osgSim osgTerrain osgViewer osgGA osgText)
+FIND_PACKAGE(OpenSceneGraph 3.0.0 REQUIRED osgDB osgFX osgUtil osgSim osgTerrain osgViewer osgGA osgText)
 FIND_PACKAGE(GDAL)
 
 ################################################################################

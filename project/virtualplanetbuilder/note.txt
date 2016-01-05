@@ -1,0 +1,19 @@
+﻿vpbmaster:
+
+parameter:
+-d gcanyon_height.tiff -t gcanyon_color_4k2k.tiff -o gcanyon.osgb --RGBA
+
+work directory:
+$(ProjectDir)../../../../data
+
+environment:
+PATH=%PATH%;$(TargetDir)
+
+
+osgdem:
+
+parameter:
+--run-path $(ProjectDir)../../../../../data -s build_master.source --record-subtile-on-leaf-tiles -l 3 --task tasks/build_root_L0_X0_Y0.task --log logs/build_root_L0_X0_Y0.log --RGBA
+
+work directory:
+$(ProjectDir)../../../../data
