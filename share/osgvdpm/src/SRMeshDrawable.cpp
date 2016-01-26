@@ -35,6 +35,14 @@ BoundingSphere SRMeshDrawable::computeBound() const
     return bsphere;
 }
 
+BoundingBox SRMeshDrawable::computeBoundingBox() const
+{
+    const vdpm::Bounds& bounds = srmesh->getBounds();
+    BoundingBox bbox(bounds.min.x, bounds.min.y, bounds.min.z, bounds.max.x, bounds.max.y, bounds.max.z);
+
+    return bbox;
+}
+
 void SRMeshDrawable::drawImplementation(RenderInfo& renderInfo) const
 {
     SRMeshUserData* userData = (SRMeshUserData*)renderInfo.getView()->getUserData();
