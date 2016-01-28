@@ -2,6 +2,7 @@
 
 parameter:
 north-america.osgt --tau 0.01 --afaces 10000 --amortize 4 --gtime 8
+gcanyonvdpm.osgb --tau 0.01 --afaces 10000 --amortize 4 --gtime 8
 
 work directory:
 $(ProjectDir)../../../../data
@@ -15,6 +16,7 @@ osgvdpmcompositeviewer:
 
 parameter:
 north-america.osgt --tau 0.01 --afaces 10000 --amortize 4 --gtime 8
+gcanyonvdpm.osgb --tau 0.01 --afaces 10000 --amortize 4 --gtime 8
 
 work directory:
 $(ProjectDir)../../../../data

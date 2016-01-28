@@ -1,7 +1,7 @@
 ﻿vpbmaster:
 
 parameter:
--d gcanyon_height.tiff -t gcanyon_color_4k2k.tiff -o gcanyon.osgb --RGBA
+-l 4 -d gcanyon_height.tiff -t gcanyon_color_4k2k.tiff -o gcanyon.osgb --POLYGONAL --RGBA --LOD
 
 work directory:
 $(ProjectDir)../../../../data

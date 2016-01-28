@@ -37,7 +37,6 @@ class OSG_EXPORT SRMeshDrawable : public osg::Drawable
 
         virtual void drawImplementation(osg::RenderInfo& renderInfo) const;
 
-        virtual osg::BoundingSphere computeBound() const;
         virtual osg::BoundingBox computeBoundingBox() const;
 
         void setSRMesh(vdpm::SRMesh* srmesh) { this->srmesh = srmesh; }

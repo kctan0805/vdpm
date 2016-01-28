@@ -25,16 +25,6 @@ SRMeshDrawable::~SRMeshDrawable()
     delete viewport;
 }
 
-BoundingSphere SRMeshDrawable::computeBound() const
-{
-    BoundingSphere bsphere;
-    const vdpm::Bounds& bounds = srmesh->getBounds();
-    bsphere._center.set(bounds.center.x, bounds.center.y, bounds.center.z);
-    bsphere._radius = bounds.radius;
-
-    return bsphere;
-}
-
 BoundingBox SRMeshDrawable::computeBoundingBox() const
 {
     const vdpm::Bounds& bounds = srmesh->getBounds();
