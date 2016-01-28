@@ -18,8 +18,9 @@
 #define NV_CONST
 
 // Set standard function names.
+#if _MSC_VER < 1900
 #define snprintf _snprintf
-#if _MSC_VER < 1500
+#elif _MSC_VER < 1500
 #	define vsnprintf _vsnprintf
 #endif
 #define vsscanf _vsscanf
