@@ -1,2 +1,2 @@
 work directory:
-$(ProjectDir)/../../../../../data
+$(ProjectDir)../../../../data

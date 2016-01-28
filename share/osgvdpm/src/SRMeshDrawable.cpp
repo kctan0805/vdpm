@@ -27,8 +27,9 @@ SRMeshDrawable::~SRMeshDrawable()
 
 BoundingBox SRMeshDrawable::computeBoundingBox() const
 {
-    const vdpm::Bounds& bounds = srmesh->getBounds();
-    BoundingBox bbox(bounds.min.x, bounds.min.y, bounds.min.z, bounds.max.x, bounds.max.y, bounds.max.z);
+    const vdpm::Vector& boundMin = srmesh->getBoundMin();
+    const vdpm::Vector& boundMax = srmesh->getBoundMax();
+    BoundingBox bbox(boundMin.x, boundMin.y, boundMin.z, boundMax.x, boundMax.y, boundMax.z);
 
     return bbox;
 }

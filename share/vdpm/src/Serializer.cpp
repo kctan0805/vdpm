@@ -80,6 +80,13 @@ int Serializer::readSRMesh(InStream& is, SRMesh* srmesh)
 
     is.readUInt(flags);
 
+    is.readFloat(srmesh->boundMin.x);
+    is.readFloat(srmesh->boundMin.y);
+    is.readFloat(srmesh->boundMin.z);
+    is.readFloat(srmesh->boundMax.x);
+    is.readFloat(srmesh->boundMax.y);
+    is.readFloat(srmesh->boundMax.z);
+
     is.readUInt(srmesh->baseVCount);
     is.readUInt(srmesh->baseFCount);
     is.readUInt(srmesh->vsplitCount);
@@ -283,16 +290,6 @@ SRMesh* Serializer::readSRMesh(InStream& is)
     if (readSRMesh(is, srmesh))
         goto error;
 
-#ifdef VDPM_BOUNDS
-    for (unsigned int i = 0; i < srmesh->baseVCount; ++i)
-    {
-        VGeom* vgeom = srmesh->getVGeom(i);
-        srmesh->bounds.addPoint(vgeom->point, true);
-    }
-    srmesh->bounds.complete();
-
-#endif // VDPM_BOUNDS
-
     srmesh->allocator = &Allocator::getInstance();
 
     return srmesh;
@@ -340,16 +337,6 @@ SRMesh* Serializer::loadSRMesh(InStream& is)
         }
     }
 
-#ifdef VDPM_BOUNDS
-    for (unsigned int i = 0; i < srmesh->baseVCount; ++i)
-    {
-        VGeom* vgeom = srmesh->getVGeom(i);
-        srmesh->bounds.addPoint(vgeom->point, true);
-    }
-    srmesh->bounds.complete();
-
-#endif // VDPM_BOUNDS
-
     srmesh->allocator = &Allocator::getInstance();
 
     return srmesh;
@@ -380,6 +367,13 @@ int Serializer::writeSRMesh(OutStream& os, SRMesh* srmesh)
         flags |= VDPM_HAS_TEXCOORD;
 
     os.writeUInt(flags);
+
+    os.writeFloat(srmesh->boundMin.x);
+    os.writeFloat(srmesh->boundMin.y);
+    os.writeFloat(srmesh->boundMin.z);
+    os.writeFloat(srmesh->boundMax.x);
+    os.writeFloat(srmesh->boundMax.y);
+    os.writeFloat(srmesh->boundMax.z);
 
     os.writeUInt(srmesh->baseVCount);
     os.writeUInt(srmesh->baseFCount);

@@ -64,7 +64,6 @@ public:
     float getTau();
     unsigned int getAFaces();
     const Point& getViewPosition();
-    const Bounds& getBounds();
     int getFps() { return fps; }
     unsigned int getTStripCount();
     unsigned int getVMorphCount();
@@ -129,9 +128,8 @@ private:
     GLuint texture;
     Image::Bmp* bmp;
     bool viewChanged, textureChanged, paramChanged, initialized, colorEnabled, textureEnabled, lightEnabled, fillChanged, fileLoading, fileUnloading, testingVsplit, testingEcol;
-    float tau;
+    float tau, radius;
     unsigned int targetAfaceCount;
     int gtime, amortizeStep, fps, meshCount;
-    Bounds bounds;
 };
 #endif

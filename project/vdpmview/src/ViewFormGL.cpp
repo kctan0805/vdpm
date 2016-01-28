@@ -150,8 +150,6 @@ void ViewFormGL::updateStatus()
 {
     std::wstringstream wss;
     const Point& pos = model->getViewPosition();
-    const Bounds& bounds = model->getBounds();
-    Vector dist = bounds.center - pos;
     unsigned int afaceCount = model->getAFaces();
     unsigned int vmorphCount = model->getVMorphCount();
     unsigned int tstripCount = model->getTStripCount();
@@ -167,11 +165,6 @@ void ViewFormGL::updateStatus()
         << L"\nAvg. faces per strip: " << ((tstripCount > 0) ? ((float)afaceCount / tstripCount) : 0)
         << L"\nFPS: " << model->getFps()
         << L"\nView position: " << pos.x << " " << pos.y << " " << pos.z
-        << L"\nBounds:"
-        << "\n     min: " << bounds.min.x << " " << bounds.min.y << " " << bounds.min.z
-        << "\n     max: " << bounds.max.x << " " << bounds.max.y << " " << bounds.max.z
-        << "\n  center: " << bounds.center.x << " " << bounds.center.y << " " << bounds.center.z
-        << "\nDistance: " << sqrt(dotProduct(dist, dist))
         << std::ends;
 
     textStatus.setText(wss.str().c_str());

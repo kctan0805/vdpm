@@ -443,6 +443,17 @@ void SRMeshConv::write(MxVdpmSlim* slim, MxStdModel* m)
     bool hasColor, hasTexCoord;
     unsigned int vgeomCount;
 
+    // Output bounds
+    for (i = 0; i < 3; i++)
+    {
+        this->boundMin[i] = slim->bounds.min[i];
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        this->boundMax[i] = slim->bounds.max[i];
+    }
+
     // Output base vertex counts
     this->baseVCount = slim->valid_verts;
 

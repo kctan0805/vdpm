@@ -56,9 +56,9 @@ namespace vdpm
         void printStatus();
         void printAVertex(AVertex* avertex);
 
-    #ifdef VDPM_BOUNDS
-        const Bounds& getBounds() { return bounds; }
-    #endif
+        const Vector& getBoundMin() { return boundMin; }
+        const Vector& getBoundMax() { return boundMax; }
+
         float getTau() { return tau; };
         unsigned int getVertexCount() { return vcount; };
         unsigned int getAFaceCount() { return afaceCount; };
@@ -160,9 +160,9 @@ namespace vdpm
         unsigned int amortizeBudget, amortizeCount, amortizeStep;
 #endif
 
-#ifdef VDPM_BOUNDS
-        Bounds bounds;
-#endif
+        Vector boundMin;
+        Vector boundMax;
+
         char* texname;
         Geometry geometry;
         Allocator* allocator;

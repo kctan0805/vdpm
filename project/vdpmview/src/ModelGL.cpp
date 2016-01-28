@@ -538,7 +538,7 @@ void ModelGL::zoomCamera(int y)
     if (!initialized)
         return;
 
-    cameraDistance -= (y - mouseY) * bounds.radius * 0.01f;
+    cameraDistance -= (y - mouseY) * radius * 0.01f;
     mouseY = y;
     viewChanged = true;
 }
@@ -665,6 +665,7 @@ void ModelGL::setOrthoFrustum(float l, float r, float b, float t, float n, float
 void ModelGL::loadSRMesh(const char fileLine[])
 {
     SRMesh* srmesh;
+    Vector center;
 
     if (meshCount >= MAX_MESH_COUNT)
         return;
@@ -674,12 +675,13 @@ void ModelGL::loadSRMesh(const char fileLine[])
     srmesh = meshes[meshCount];
 
     //srmesh->printStatus();
-    if (meshCount == 0)
-        bounds = srmesh->getBounds();
-    else
-        bounds.merge(srmesh->getBounds());
+    center = (srmesh->getBoundMin() + srmesh->getBoundMax()) / 2;
+    Vector R1 = srmesh->getBoundMax() - center;
+    Vector R2 = srmesh->getBoundMin() - center;
 
-    cameraDistance = 3 * bounds.radius / tan(60 * (float)M_PI / 180.0f);
+    radius = max(magnitude(R1), magnitude(R2));
+
+    cameraDistance = 3 * radius / tan(60 * (float)M_PI / 180.0f);
     projectionNear = cameraDistance / 20;
     projectionFar = 10 * cameraDistance;
     float tangent = tan(FOV_Y / 2 * DEG2RAD);   // tangent of half fovY
@@ -687,9 +689,9 @@ void ModelGL::loadSRMesh(const char fileLine[])
     projectionRight = projectionTop * windowWidth / (windowHeight / 2);      // half width of near plane
     projectionLeft = -projectionRight;
     projectionBottom = -projectionTop;
-    cameraPosition[0] = bounds.center.x;
-    cameraPosition[1] = bounds.center.y;
-    cameraPosition[2] = bounds.center.z + cameraDistance;
+    cameraPosition[0] = center.x;
+    cameraPosition[1] = center.y;
+    cameraPosition[2] = center.z + cameraDistance;
 
     srmesh->setViewport(&Viewport::getDefaultInstance());
     srmesh->setViewAngle(FOV_Y * DEG2RAD);
@@ -781,16 +783,6 @@ const Point& ModelGL::getViewPosition()
         return Viewport::getDefaultInstance().getViewPosition();
 
     return pt;
-}
-
-const Bounds& ModelGL::getBounds()
-{
-    static const Bounds b;
-
-    if (initialized)
-        return bounds;
-
-    return b;
 }
 
 unsigned int ModelGL::getTStripCount()

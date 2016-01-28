@@ -29,6 +29,13 @@ MxVdpmSlim::MxVdpmSlim(MxStdModel *m0)
 
     D = compute_dimension(m);
 
+    bounds.reset();
+
+    for (MxVertexID v = 0; v<m->vert_count(); v++)
+        bounds.add_point(m->vertex(v));
+
+    bounds.complete();
+
     will_decouple_quadrics = false;
     contraction_callback = NULL;
 }

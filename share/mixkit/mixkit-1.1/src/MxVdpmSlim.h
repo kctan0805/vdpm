@@ -6,6 +6,7 @@
 
 #include "MxStdSlim.h"
 #include "MxQMetric.h"
+#include "MxGeom3D.h"
 
 class MxVdpmVector : public MxVector
 {
@@ -112,6 +113,7 @@ public:
     MxBlock<float> vertex_radiuses;			// 1 per vertex
     MxBlock<float[3]> face_normals;			// 1 per face
     MxBlock<MxFaceList> vertex_neighbors;	// 1 per vertex
+    MxBounds bounds;
 
 public:
     MxVdpmSlim(MxStdModel *);

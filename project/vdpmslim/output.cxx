@@ -572,6 +572,7 @@ void output_progressive_vdpm(ostream& out)
     }
 
     uint32_t valu;
+    float valf;
 
     // Output header magic
     valu = VDPM_FILE_FORMAT_MAGIC;
@@ -591,6 +592,19 @@ void output_progressive_vdpm(ostream& out)
         valu |= VDPM_HAS_TEXCOORD;
 
     out.write((char*)&valu, sizeof(uint32_t));
+
+    // Output bounds
+    for (i = 0; i < 3; i++)
+    {
+        valf = slim->bounds.min[i];
+        out.write((char*)&valf, sizeof(float));
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        valf = slim->bounds.max[i];
+        out.write((char*)&valf, sizeof(float));
+    }
 
 	// Output base vertex counts
     valu = slim->valid_verts;
@@ -625,8 +639,6 @@ void output_progressive_vdpm(ostream& out)
         mxmsg_signalf(MXMSG_DEBUG, "v[%u] p:%d i:%d", i, v.parent, v.i);
     #endif
 	}
-
-    float valf;
 
 	// Output geometries
 	for (i=0; i<vcount;i++)

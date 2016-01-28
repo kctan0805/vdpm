@@ -111,21 +111,6 @@ namespace vdpm
         return sqrt(squareMagnitude(v));
     }
 
-    struct Bounds
-    {
-        bool initialized;
-        Vector min, max;
-        Vector center;
-        float radius;
-        unsigned int points;
-
-        void addPoint(const Vector& v, bool will_update);
-        void complete();
-        void merge(const Bounds& b);
-
-        Bounds();
-    };
-
 } // namespace vdpm
 
 #endif // VDPM_UTILITY_H
