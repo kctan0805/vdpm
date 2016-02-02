@@ -20,6 +20,20 @@ include(${PROJECT_SOURCE_DIR}/config/link.cmake)
 # examples
 SET(TARGET_DEFAULT_PREFIX "example_")
 
+#osganimationviewer
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples/osganimationviewer)
+SET(TARGET_NAME "osganimationviewer")
+SET(CMAKE_PROJECT_NAME "${TARGET_DEFAULT_PREFIX}${TARGET_NAME}")
+
+SET(TARGET_SRC
+  ${SRC_DIR}/AnimtkViewer.cpp
+  ${SRC_DIR}/AnimtkViewerKeyHandler.cpp
+  ${SRC_DIR}/AnimtkViewerGUI.cpp
+  )
+
+ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${TARGET_SRC})
+include(${PROJECT_SOURCE_DIR}/config/link.cmake)
+
 #osgclip
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples/osgclip)
 SET(TARGET_NAME "osgclip")

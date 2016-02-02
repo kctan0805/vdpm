@@ -1,4 +1,13 @@
-﻿osgvdpmstaticviewer:
+﻿osgvdpmanimationviewer:
+
+parameter:
+morphingvdpm.osgt --tau 0.01 --afaces 10000 --amortize 4 --gtime 8
+
+work directory:
+$(ProjectDir)../../../../data
+
+
+osgvdpmstaticviewer:
 
 parameter:
 north-america.osgt --tau 0.01 --afaces 10000 --amortize 4 --gtime 8

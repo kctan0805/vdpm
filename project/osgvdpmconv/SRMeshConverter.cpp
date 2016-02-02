@@ -808,10 +808,30 @@ void SRMeshConverter::read(MxStdModel& m, osg::Geometry& geometry)
                 type == PrimitiveSet::DrawElementsUIntPrimitiveType)
             {
                 osg::PrimitiveSet* prim = (*itr)->asPrimitiveSet();
-                int j = prim->getNumPrimitives();
-                for (unsigned int i = 0; i < prim->getNumPrimitives(); ++i)
+                unsigned int j = prim->getNumPrimitives();
+                for (unsigned int i = 0; i < j; ++i)
                 {
                     m.add_face(prim->index(i*3), prim->index(i*3+1), prim->index(i*3+2));
+                }
+            }
+            else
+            {
+                assert(0);
+            }
+        }
+        else if ((*itr)->getMode() == PrimitiveSet::QUADS)
+        {
+            PrimitiveSet::Type type = (*itr)->getType();
+            if (type == PrimitiveSet::DrawElementsUBytePrimitiveType ||
+                type == PrimitiveSet::DrawElementsUShortPrimitiveType ||
+                type == PrimitiveSet::DrawElementsUIntPrimitiveType)
+            {
+                osg::PrimitiveSet* prim = (*itr)->asPrimitiveSet();
+                unsigned int j = prim->getNumPrimitives();
+                for (unsigned int i = 0; i < j; ++i)
+                {
+                    m.add_face(prim->index(i * 4), prim->index(i * 4 + 1), prim->index(i * 4 + 2));
+                    m.add_face(prim->index(i * 4 + 2), prim->index(i * 4 + 3), prim->index(i * 4));
                 }
             }
             else

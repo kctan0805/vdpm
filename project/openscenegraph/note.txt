@@ -1,10 +1,19 @@
-﻿example_osgstaticviewer:
+﻿example_osganimationviewer:
+
+parameter:
+nathan.osg
+
+work directory:
+$(ProjectDir)../../../../data
+
+
+example_osgstaticviewer:
 
 parameter:
 cow.osg
 
 work directory:
-$(ProjectDir)/../../../../../data
+$(ProjectDir)../../../../data
 
 environment variable:
 name: OSG_WINDOW
@@ -14,4 +23,4 @@ variable: 100 100 640 480
 example_osgwindows:
 
 work directory:
-$(ProjectDir)/../../../../../data
+$(ProjectDir)../../../../data

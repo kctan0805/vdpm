@@ -3,6 +3,15 @@ include_directories(
     ${OSGVDPM_INCLUDE_DIR}
 )
 
+# osgvdpmanimationviewer
+set(CMAKE_PROJECT_NAME osgvdpmanimationviewer)
+add_executable(osgvdpmanimationviewer
+    osgvdpmanimationviewer/AnimtkViewer.cpp
+    osgvdpmanimationviewer/AnimtkViewerKeyHandler.cpp
+    osgvdpmanimationviewer/AnimtkViewerGUI.cpp
+)
+include(${PROJECT_SOURCE_DIR}/config/link.cmake)
+
 # osgvdpmcompositeviewer
 set(CMAKE_PROJECT_NAME osgvdpmcompositeviewer)
 add_executable(osgvdpmcompositeviewer osgvdpmcompositeviewer/osgvdpmcompositeviewer.cpp)

@@ -67,6 +67,25 @@ USE_SERIALIZER_WRAPPER_LIBRARY(osgText)
 USE_SERIALIZER_WRAPPER_LIBRARY(osgVolume)
 USE_SERIALIZER_WRAPPER_LIBRARY(osgVdpm)
 
+//osg animation
+struct RegisterDotOsgWrapperProxyProxy
+{
+    RegisterDotOsgWrapperProxyProxy(osgDB::RegisterDotOsgWrapperProxy& proxy) : _proxy(proxy) {}
+    osgDB::RegisterDotOsgWrapperProxy& _proxy;
+};
+
+extern osgDB::RegisterDotOsgWrapperProxy g_BoneProxy;
+RegisterDotOsgWrapperProxyProxy g_BoneProxyProxy(g_BoneProxy);
+
+extern osgDB::RegisterDotOsgWrapperProxy g_StackedTranslateElementProxy;
+RegisterDotOsgWrapperProxyProxy g_StackedTranslateElementProxyProxy(g_StackedTranslateElementProxy);
+
+extern osgDB::RegisterDotOsgWrapperProxy g_UpdateMaterialProxy;
+RegisterDotOsgWrapperProxyProxy g_UpdateMaterialProxyProxy(g_UpdateMaterialProxy);
+
+extern osgDB::RegisterDotOsgWrapperProxy g_UpdateMatrixTransformProxy;
+RegisterDotOsgWrapperProxyProxy g_UpdateMatrixTransformProxyProxy(g_UpdateMatrixTransformProxy);
+
 typedef std::vector<std::string> FileNameList;
 
 class MyGraphicsContext {
