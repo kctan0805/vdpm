@@ -743,8 +743,7 @@ void SRMeshConverter::apply(osg::Geode & geode)
             srmeshdrawable->setName(geometry->getName());
             srmeshdrawable->setStateSet(geometry->getStateSet());
 
-            geode.removeDrawable(geometry);
-            geode.addDrawable(srmeshdrawable);
+            geode.replaceDrawable(geometry, srmeshdrawable);
 
             delete history;
             delete slim;
