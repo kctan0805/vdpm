@@ -742,7 +742,8 @@ void SRMeshConverter::apply(osg::Geode & geode)
 
             srmeshdrawable->setName(geometry->getName());
             srmeshdrawable->setStateSet(geometry->getStateSet());
-
+            srmeshdrawable->setUserDataContainer(geometry->getUserDataContainer());
+            
             geode.replaceDrawable(geometry, srmeshdrawable);
 
             delete history;
