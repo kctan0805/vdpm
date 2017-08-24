@@ -2,7 +2,7 @@
 * Copyright 2015 Jim Tan
 * https://github.com/kctan0805/vdpm
 *
-* osgEarth is free software; you can redistribute it and/or modify
+* osgVdpm is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
 * (at your option) any later version.
