@@ -244,7 +244,7 @@ int Serializer::readSRMesh(InStream& is, SRMesh* srmesh)
     }
 
     srmesh->vsplits = new VSplit[srmesh->vsplitCount];
-    if (!srmesh->faces)
+    if (!srmesh->vsplits)
         goto error;
 
     for (i = 0; i < srmesh->vsplitCount; ++i)
